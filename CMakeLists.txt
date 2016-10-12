@@ -108,18 +108,13 @@ ELSE()
 add_definitions("-I ${CMAKE_SOURCE_DIR}/include")
 ENDIF()
 
-add_library(particle_simulation STATIC
+add_library(particle_based_simulation STATIC
 	${algorithm_files}
-	${simulation_files}
-	${particle_files}
-	${collision_object_files}
-	${mesh_files}
-	${profile_files}
-	${primitive_files}
-	${bullet_algorithm_files}
 	${additional_procedure_files}
-	${povray_files}
-	${shape_2d_files}
+	${collision_dispatcher_files}
+	${math_files}
+	${particle_files}
+	${world_files}
 )
 
 

@@ -29,15 +29,15 @@ public:
     Mesh() = delete;
     ~Mesh() = default;
     
-    /**
+    /** インスタンス化した状態では衝突形状はnullptrのままなので, fj::Mesh::loadFromFile() でデータを読み込む必要がある.
      * @param filename .objのファイル 
      * @param mass 質量
      * @param motionState
      * @param localInertia 回転のしにくさ*/
-    Mesh(const btScalar mass, std::unique_ptr<btMotionState> motionState, const btVector3& localInertia = btVector3(0, 0, 0))
-    : Super(mass, std::move(motionState), nullptr/*collisionShape*/, localInertia)
+    Mesh(const btScalar mass)
+    : Super(mass, nullptr/*collisionShape*/)
     {
-        
+        // コンストラクタの中ではなくて、別の関数でメッシュを読み込ませることにする.
     }
     
     /** ファイルシステムから Wavefront OBJ 形式のファイルを読み込む

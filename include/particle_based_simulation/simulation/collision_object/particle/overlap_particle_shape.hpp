@@ -16,7 +16,7 @@ namespace fj {
 }
 
 /// Bullet Physicsのフレームワークで使用される形状を粉体粒子用にカスタマイズしたもの.
-/** パーティクルは球体であると仮定します. */
+/** オーバーラップを検出するために利用するので, 形状は球体とします. */
 class fj::OverlapParticleShape : public btSphereShape
 {
     typedef btSphereShape Super;

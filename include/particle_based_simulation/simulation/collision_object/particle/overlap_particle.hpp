@@ -31,9 +31,7 @@ public:
      * @note 引数で指定したオーバーラップは他の粒子のオーバーラップと衝突することに留意してください.
      *             例えばオーバーラップ0.5で作られたパーティクル同士の衝突を検知するのは, 粒子間の距離が 0.5+0.5→1.0 の時です*/
     OverlapParticle(const btScalar overlap, const btScalar mass)
-    : Super(mass
-            , std::unique_ptr<btMotionState>(new btDefaultMotionState)
-            , std::unique_ptr<btSphereShape>(new fj::OverlapParticleShape(overlap)))
+    : Super(mass, std::unique_ptr<fj::OverlapParticleShape>(new fj::OverlapParticleShape(overlap)))
     {
         
     }

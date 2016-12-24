@@ -25,14 +25,11 @@ int main(int argc, char** argv)
     auto world = rheorogyAlgorithm->getWorldPtr();
     world->setGravity( btVector3(0, -9.8, 0) );
     
-        // レンダリング
-    auto povray = rheorogyAlgorithm->generateProfileSystem(fj::ParticleAlgorithm::Profile::kPOVRayOutput);
-    auto output = static_cast<fj::POVRayOutput*>(povray.get());
+    auto output = rheorogyAlgorithm->setupPOVRaySceneOutputSystem();
     auto& location =  output->getCameraInformationPtr()->Location;
     location.X = -15;
     location.Y = 25;
     location.Z = 15;
-    rheorogyAlgorithm->addProfileSystem(std::move(povray));
     
     // 床
     const btScalar mass(0.);

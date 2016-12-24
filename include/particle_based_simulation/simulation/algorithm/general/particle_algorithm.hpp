@@ -29,8 +29,17 @@ public:
     ParticleAlgorithm() = default;
     virtual~ParticleAlgorithm() = default;
     
-    /** 追加処理を作成する. */
-    std::unique_ptr<fj::AdditionalProcedure> generateProfileSystem(const Profile profile);
+    
+    /** POV-Ray形式でシーンを出力するシステムを作成する.
+     * @return 作成したシステムへのポインタ
+     * @todo 複数回呼び出すと, 同じ役割のインスタンスが作成されてしまう問題を解決する. */
+    fj::POVRayOutput*const setupPOVRaySceneOutputSystem()
+    {
+        std::unique_ptr<fj::POVRayOutput> povray{new fj::POVRayOutput(getWorld())};
+        fj::POVRayOutput*const povrayPointer = povray.get();
+        addProfileSystem(std::move(povray));
+        return povrayPointer;
+    }
     
     
     virtual const fj::OverlapParticleWorld& getOverlapParticleWorld()const = 0;

@@ -41,6 +41,7 @@ public:
     /** シミュレーション時間のプロファイラを作成する. */
     fj::SimulationTimeProfile*const setupSimulationTimeProfileSystem();
 
+protected:
     /** 追加処理を追加する.
      * @pre プロファイルが fj::SimulationProfile::Priority 順に並んでいる.
      * @post プロファイルが fj::SimulationProfile::Priority 順に並んでいる. */

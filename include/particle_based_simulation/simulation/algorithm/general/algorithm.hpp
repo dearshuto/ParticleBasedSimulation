@@ -14,6 +14,7 @@
 #include "particle_based_simulation/additional/additional_procedure.hpp"
 
 namespace fj {
+    class SimulationTimeProfile;
     class Algorithm;
 }
 
@@ -21,12 +22,6 @@ namespace fj {
 /** とりあえずシミュレーションの流れをテンプレート化してる.  */
 class fj::Algorithm
 {
-public:
-    /// fj::Algorithm の情報をプロファイルするシステム一覧
-    enum class Profile : uint8_t
-    {
-        kSimulationTimeProfile,
-    };
 protected:
     Algorithm()
     : m_simulationStep(0)
@@ -43,8 +38,8 @@ public:
     /** シミュレーションの終了処理. 呼ばなくてもメモリリークは起きない. */
     void terminate();
     
-    /** 追加処理を作成する. */
-    std::unique_ptr<fj::AdditionalProcedure> generateProfileSystem(const Profile profile);
+    /** シミュレーション時間のプロファイラを作成する. */
+    fj::SimulationTimeProfile*const setupSimulationTimeProfileSystem();
 
     /** 追加処理を追加する.
      * @pre プロファイルが fj::SimulationProfile::Priority 順に並んでいる.

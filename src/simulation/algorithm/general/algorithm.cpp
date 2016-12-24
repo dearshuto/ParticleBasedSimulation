@@ -43,19 +43,12 @@ void fj::Algorithm::terminate()
     }
 }
 
-std::unique_ptr<fj::AdditionalProcedure> fj::Algorithm::generateProfileSystem(const fj::Algorithm::Profile profile)
+fj::SimulationTimeProfile*const fj::Algorithm::setupSimulationTimeProfileSystem()
 {
-    std::unique_ptr<fj::AdditionalProcedure> procedure;
-    
-    switch (profile) {
-        case Profile::kSimulationTimeProfile:
-            procedure.reset(new fj::SimulationTimeProfile);
-            break;
-        default:
-            break;
-    }
-    
-    return procedure;
+    std::unique_ptr<fj::SimulationTimeProfile> profiler{new fj::SimulationTimeProfile};
+    fj::SimulationTimeProfile*const profilePointer = profiler.get();
+    addProfileSystem(std::move(profiler));
+    return profilePointer;
 }
 
 void fj::Algorithm::addProfileSystem(std::unique_ptr<fj::AdditionalProcedure> additionalProcedure)

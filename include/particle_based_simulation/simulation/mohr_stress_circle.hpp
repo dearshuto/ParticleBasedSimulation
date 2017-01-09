@@ -47,7 +47,7 @@ public:
     void rebuildMohrCircle(const btQuaternion& rotateMatrix);
     
     /// 崩壊曲線と交点をもつかを判定する
-    bool hasContactPoint(const fj::CollapseCurve& warrenSpringCurve)const;
+    bool hasContactPoint(const fj::CollapseCurve& collapseCurve)const;
     
     void clearContactForce();
     

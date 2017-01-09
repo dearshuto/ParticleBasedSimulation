@@ -75,7 +75,11 @@ fj::MohrStressCircle::NormalStressContainer fj::MohrStressCircle::computeNormalS
     return stressContainer;
 }
 
-bool fj::MohrStressCircle::hasContactPoint(const fj::CollapseCurve &warrenSpringCurve)const
+bool fj::MohrStressCircle::hasContactPoint(const fj::CollapseCurve &collapseCurve)const
 {
-    return false;
+    // とりあえずモールの応力円の中心のx座標で比較することで交差点が存在するかを判定する
+    // todo: 任意の曲線と円における最近傍を求める一般的な解法に変える
+    
+    const auto& kThisCenter = getCenter();
+    return collapseCurve.compute(kThisCenter.X) < kThisCenter.Y;
 }

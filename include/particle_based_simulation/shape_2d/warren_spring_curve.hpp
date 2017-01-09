@@ -9,13 +9,13 @@
 #ifndef warren_spring_curve_hpp
 #define warren_spring_curve_hpp
 
-#include "math_function_c2.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/collapse_curve.hpp"
 
 namespace fj {
     class WarrenSpringCurve;
 }
 
-class fj::WarrenSpringCurve : public fj::MathFunctionC2
+class fj::WarrenSpringCurve : public fj::CollapseCurve
 {
 private:
     // ワーレンス・スプリング曲線を定義するためのパラメータ
@@ -37,6 +37,12 @@ private:
 public:
     WarrenSpringCurve() = default;
     ~WarrenSpringCurve() = default;
+    
+    WarrenSpringCurve(const Parameter& parameter)
+    : m_parameter(parameter)
+    {
+        
+    }
     
     double compute(const double x)const override;
     

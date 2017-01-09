@@ -16,7 +16,7 @@ namespace fj {
 }
 
 /// 粉体崩壊曲線
-class fj::CollapseCurve : fj::MathFunctionC2
+class fj::CollapseCurve : public fj::MathFunctionC2
 {
 protected:
     CollapseCurve() = default;

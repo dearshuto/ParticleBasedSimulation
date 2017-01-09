@@ -6,4 +6,4 @@
 //
 //
 
-#include "collapse_curve.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/collapse_curve.hpp"

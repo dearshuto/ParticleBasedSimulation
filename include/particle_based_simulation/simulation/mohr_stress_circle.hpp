@@ -18,6 +18,7 @@
 #include "particle_based_simulation/shape_2d/warren_spring_curve.hpp"
 
 namespace fj {
+    class CollapseCurve;
     class MohrStressCircle;
 }
 
@@ -44,6 +45,9 @@ public:
     
     /// モール応力円の中心と半径を再計算する.*/
     void rebuildMohrCircle(const btQuaternion& rotateMatrix);
+    
+    /// 崩壊曲線と交点をもつかを判定する
+    bool hasContactPoint(const fj::CollapseCurve& warrenSpringCurve)const;
     
     void clearContactForce();
     

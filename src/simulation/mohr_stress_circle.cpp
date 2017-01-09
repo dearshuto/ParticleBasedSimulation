@@ -74,3 +74,8 @@ fj::MohrStressCircle::NormalStressContainer fj::MohrStressCircle::computeNormalS
     
     return stressContainer;
 }
+
+bool fj::MohrStressCircle::hasContactPoint(const fj::CollapseCurve &warrenSpringCurve)const
+{
+    return false;
+}

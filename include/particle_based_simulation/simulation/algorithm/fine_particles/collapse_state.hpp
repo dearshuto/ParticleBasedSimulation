@@ -21,7 +21,7 @@ public:
     CollapseState() = default;
     virtual~CollapseState() = default;
     
-    void execute(fj::FineParticle*const particle) override;
+    void update(fj::Particle<fj::RheorogyParameter>* particle)override;
 };
 
 #endif /* collapse_state_hpp */

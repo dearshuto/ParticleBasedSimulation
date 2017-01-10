@@ -31,10 +31,10 @@ class btVector3;
 template<class Parameter>
 class fj::ParticleAlgorithm : public fj::Algorithm
 {
-protected:
+public:
     /// シミュレーションに必要なパラメータを保持した粒子.
     typedef fj::Particle<Parameter> Particle;
-    
+protected:
     // このアルゴリズムに対応したワールド.
     typedef fj::GeneralParticleWorld<Particle> ParticleWorld;
     

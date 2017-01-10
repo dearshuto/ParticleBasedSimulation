@@ -9,7 +9,7 @@
 #include <numeric>
 #include <cmath>
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
-#include "particle_based_simulation/simulation/algorithm/rheorogy_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
 
 void fj::RheorogyAlgorithm::accumulateParticleForce()
 {

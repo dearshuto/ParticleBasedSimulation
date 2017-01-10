@@ -15,7 +15,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "particle_based_simulation/simulation/collision_object/particle/discritized_particle_shape.hpp"
 #include "particle_based_simulation/shape_2d/circle.hpp"
-#include "particle_based_simulation/shape_2d/warren_spring_curve.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
 
 namespace fj {
     class CollapseCurve;

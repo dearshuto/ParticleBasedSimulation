@@ -10,11 +10,11 @@
 #define rheorogy_algorithm_hpp
 
 #include <memory>
-#include "particle_based_simulation/shape_2d/warren_spring_curve.hpp"
-#include "particle_based_simulation/simulation/mohr_stress_circle.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/mohr_stress_circle.hpp"
+#include "particle_based_simulation/simulation/algorithm/general/particle_algorithm.hpp"
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
 #include "particle_based_simulation/simulation/collision_object/particle/fine_particle_state.hpp"
-#include "particle_algorithm.hpp"
 
 namespace fj {
     struct RheorogyParameter;

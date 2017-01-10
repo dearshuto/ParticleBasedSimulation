@@ -9,7 +9,7 @@
 #include <numeric>
 #include <vector>
 #include "particle_based_simulation/simulation/collision_object/particle/discritized_particle_shape.hpp"
-#include "particle_based_simulation/simulation/mohr_stress_circle.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/mohr_stress_circle.hpp"
 
 void fj::MohrStressCircle::addContactForce(const btVector3& normalStress)
 {

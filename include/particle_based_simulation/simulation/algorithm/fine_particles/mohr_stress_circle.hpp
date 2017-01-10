@@ -49,6 +49,10 @@ public:
     /// 崩壊曲線と交点をもつかを判定する
     bool hasContactPoint(const fj::CollapseCurve& collapseCurve)const;
     
+    /** この関数を呼んだ時点で, このモールの応力円をもつ粒子が他の粒子と接触していたかを判定する
+     * @attention 前に clearContactForce() を呼んだときからの接触を判定します. */
+    bool hasContact()const;
+    
     void clearContactForce();
     
     const Position2D& getCenter()const

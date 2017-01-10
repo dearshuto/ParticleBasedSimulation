@@ -18,7 +18,7 @@ namespace fj {
 /// 粉体の状態
 class fj::FineParticleState
 {
-private:
+protected:
     FineParticleState() = default;
 public:
     virtual~FineParticleState () = default;

@@ -12,14 +12,10 @@
 
 void fj::CollapseState::update(fj::Particle<fj::RheorogyParameter> *particle)
 {
-    const auto kMohrStressCircle = particle->getParameter().MohrStressCircle;
-    const WarrenSpringCurve kWarrenSpringCurve = particle->getParameter().WarrenSpringCurve;
+    // 崩壊状態では普通に接触力を適用させる.
     
-    if (kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
-    {
-        const auto force = kMohrStressCircle.getContactForceContainer();
-        const btVector3 kContactForceSum = std::accumulate(std::begin(force), std::end(force), btVector3(0, 0, 0)/*初期値*/);
-        particle->applyCentralForce(kContactForceSum);
-    }
+    const auto force = particle->getParameter().MohrStressCircle.getContactForceContainer();
+    const btVector3 kContactForceSum = std::accumulate(std::begin(force), std::end(force), btVector3(0, 0, 0)/*初期値*/);
+    particle->applyCentralForce(kContactForceSum);
     particle->getParameterPtr()->MohrStressCircle.clearContactForce();
 }

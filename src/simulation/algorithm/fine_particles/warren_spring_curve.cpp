@@ -7,7 +7,7 @@
 //
 
 #include <cmath>
-#include "particle_based_simulation/shape_2d/warren_spring_curve.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
 
 double fj::WarrenSpringCurve::compute(const double x)const
 {

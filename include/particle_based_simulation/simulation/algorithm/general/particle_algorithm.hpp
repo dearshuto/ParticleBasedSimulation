@@ -15,7 +15,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "particle_based_simulation/additional/povray/povray_output.hpp"
 #include "particle_based_simulation/simulation/general_particle_world.hpp"
-#include "particle_based_simulation/simulation/algorithm/algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/general/algorithm.hpp"
 
 namespace fj {
     template<class Parameter> class Particle;

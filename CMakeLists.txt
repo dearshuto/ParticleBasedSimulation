@@ -31,8 +31,6 @@ FILE(GLOB_RECURSE simulation_files
 	${Src_Folder}/simulation/particle_world.cpp
 	${Include_Folder}/simulation/overlap_particle_world.hpp
 	${Src_Folder}/simulation/overlap_particle_world.cpp
-	${Include_Folder}/simulation/mohr_stress_circle.hpp
-	${Src_Folder}/simulation/mohr_stress_circle.cpp
 )
 
 FILE(GLOB_RECURSE particle_files
@@ -40,9 +38,14 @@ FILE(GLOB_RECURSE particle_files
 	${Src_Folder}/simulation/collision_object/particle/*.cpp
 )
 
-FILE(GLOB_RECURSE algorithm_files
-	${Include_Folder}/simulation/algorithm/*.hpp
-	${Src_Folder}/simulation/algorithm/*.cpp
+FILE(GLOB_RECURSE general_algorithm_files
+	${Include_Folder}/simulation/algorithm/general/*.hpp
+	${Src_Folder}/simulation/algorithm/general/*.cpp
+)
+
+FILE(GLOB_RECURSE fine_particles_algorithm_files
+	${Include_Folder}/simulation/algorithm/fine_particles/*.hpp
+	${Src_Folder}/simulation/algorithm/fine_particles/*.cpp
 )
 
 FILE(GLOB_RECURSE collision_object_files
@@ -89,7 +92,8 @@ FILE(GLOB_RECURSE profile_files
 
 ## IDEの表示における階層の設定
 SOURCE_GROUP(simulation\\ FILES ${simulation_files})
-SOURCE_GROUP(simulation\\algorithm FILES ${algorithm_files})
+SOURCE_GROUP(simulation\\algorithm\\general FILES ${general_algorithm_files})
+SOURCE_GROUP(simulation\\algorithm\\fine_particles FILES ${fine_particles_algorithm_files})
 SOURCE_GROUP(simulation\\collision_object FILES ${collision_object_files})
 SOURCE_GROUP(simulation\\collision_object\\particle FILES ${particle_files})
 SOURCE_GROUP(simulation\\collision_object\\mesh FILES ${mesh_files})
@@ -108,8 +112,20 @@ ELSE()
 add_definitions("-I ${CMAKE_SOURCE_DIR}/include")
 ENDIF()
 
+SET(algorithm_files
+	${general_algorithm_files}
+	${fine_particles_algorithm_files}
+	${simulation_files}
+)
+
 add_library(particle_based_simulation STATIC
 	${algorithm_files}
+	${particle_files}
+	${collision_object_files}
+	${mesh_files}
+	${profile_files}
+	${primitive_files}
+	${bullet_algorithm_files}
 	${additional_procedure_files}
 	${collision_dispatcher_files}
 	${math_files}

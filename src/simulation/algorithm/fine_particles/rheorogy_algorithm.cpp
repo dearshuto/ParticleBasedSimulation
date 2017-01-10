@@ -9,6 +9,7 @@
 #include <numeric>
 #include <cmath>
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/collapse_state.hpp"
 #include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
 
 void fj::RheorogyAlgorithm::accumulateParticleForce()
@@ -36,16 +37,9 @@ void fj::RheorogyAlgorithm::analyze()
 {
     for (auto& particle : getWorldPtr()->getParticles())
     {
-        const auto kMohrStressCircle = particle->getParameter().MohrStressCircle;
-        const WarrenSpringCurve kWarrenSpringCurve = particle->getParameter().WarrenSpringCurve;
-        
-        if (kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
-        {
-            const auto force = kMohrStressCircle.getContactForceContainer();
-            const btVector3 kContactForceSum = std::accumulate(std::begin(force), std::end(force), btVector3(0, 0, 0)/*初期値*/);
-            particle->applyCentralForce(kContactForceSum);
-        }
-        particle->getParameterPtr()->MohrStressCircle.clearContactForce();
+        // stateにインスタンスが設定されてないので, 必ずぬるぽで落ちる
+        const auto& status = particle->getParameter().State;
+        status->update(particle.get());
     }
 }
 

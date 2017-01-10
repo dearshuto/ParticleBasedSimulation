@@ -15,7 +15,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "particle_based_simulation/simulation/collision_object/particle/discritized_particle_shape.hpp"
 #include "particle_based_simulation/shape_2d/circle.hpp"
-#include "particle_based_simulation/shape_2d/warren_spring_curve.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
 
 namespace fj {
     class CollapseCurve;
@@ -48,6 +48,10 @@ public:
     
     /// 崩壊曲線と交点をもつかを判定する
     bool hasContactPoint(const fj::CollapseCurve& collapseCurve)const;
+    
+    /** この関数を呼んだ時点で, このモールの応力円をもつ粒子が他の粒子と接触していたかを判定する
+     * @attention 前に clearContactForce() を呼んだときからの接触を判定します. */
+    bool hasContact()const;
     
     void clearContactForce();
     

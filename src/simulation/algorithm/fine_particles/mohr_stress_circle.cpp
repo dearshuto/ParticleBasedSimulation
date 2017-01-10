@@ -9,7 +9,7 @@
 #include <numeric>
 #include <vector>
 #include "particle_based_simulation/simulation/collision_object/particle/discritized_particle_shape.hpp"
-#include "particle_based_simulation/simulation/mohr_stress_circle.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/mohr_stress_circle.hpp"
 
 void fj::MohrStressCircle::addContactForce(const btVector3& normalStress)
 {
@@ -18,16 +18,23 @@ void fj::MohrStressCircle::addContactForce(const btVector3& normalStress)
 
 void fj::MohrStressCircle::rebuildMohrCircle(const btQuaternion& rotateMatrix)
 {
-    if (m_contactForce.empty())
-    {
-        Center = {0.0, 0.0};
-        Radius = 0.0;
-        return;
-    }
-    else
+    // 接触力がないときはモールの応力円が定義できないので, 中心が原点で半径が無限大ということにしておく
+    // 半径0だと0除算が出てきそうで怖い.
+    
+    if (hasContact())
     {
         rebuildCircleCenterAndRadius(rotateMatrix);
     }
+    else
+    {
+        Center = {0.0, 0.0};
+        Radius = std::numeric_limits<float>::infinity();
+    }
+}
+
+bool fj::MohrStressCircle::hasContact()const
+{
+    return !m_contactForce.empty();
 }
 
 void fj::MohrStressCircle::clearContactForce()

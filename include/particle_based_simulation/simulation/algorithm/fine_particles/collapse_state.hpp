@@ -15,13 +15,14 @@ namespace fj {
     class CollapseState;
 }
 
+/// 粉体粒子が崩壊状態であることを示す
 class fj::CollapseState : public fj::FineParticleState
 {
 public:
     CollapseState() = default;
     virtual~CollapseState() = default;
     
-    void execute(fj::FineParticle*const particle) override;
+    void update(fj::Particle<fj::RheorogyParameter>* particle)override;
 };
 
 #endif /* collapse_state_hpp */

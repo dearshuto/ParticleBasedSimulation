@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include "particle_based_simulation/simulation/general_particle_world.hpp"
-#include "particle_based_simulation/simulation/algorithm/rheorogy_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
 #include "particle_based_simulation/additional/profile/mohr_stress_circle_distribution.hpp"
 

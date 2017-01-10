@@ -9,7 +9,9 @@
 #include <numeric>
 #include <cmath>
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
-#include "particle_based_simulation/simulation/algorithm/rheorogy_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/collapse_state.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/equipoise_state.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
 
 void fj::RheorogyAlgorithm::accumulateParticleForce()
 {
@@ -34,6 +36,17 @@ void fj::RheorogyAlgorithm::accumulateParticleForce()
 
 void fj::RheorogyAlgorithm::analyze()
 {
+    updateParticleState();
+    
+    for (auto& particle : getWorldPtr()->getParticles())
+    {
+        const auto& status = particle->getParameter().State;
+        status->update(particle.get());
+    }
+}
+
+void fj::RheorogyAlgorithm::updateParticleState()
+{
     for (auto& particle : getWorldPtr()->getParticles())
     {
         const auto kMohrStressCircle = particle->getParameter().MohrStressCircle;
@@ -41,11 +54,12 @@ void fj::RheorogyAlgorithm::analyze()
         
         if (kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
         {
-            const auto force = kMohrStressCircle.getContactForceContainer();
-            const btVector3 kContactForceSum = std::accumulate(std::begin(force), std::end(force), btVector3(0, 0, 0)/*初期値*/);
-            particle->applyCentralForce(kContactForceSum);
+            particle->getParameterPtr()->State.reset(new fj::CollapseState);
         }
-        particle->getParameterPtr()->MohrStressCircle.clearContactForce();
+        else
+        {
+            particle->getParameterPtr()->State.reset(new fj::EquipoiseState);
+        }
     }
 }
 

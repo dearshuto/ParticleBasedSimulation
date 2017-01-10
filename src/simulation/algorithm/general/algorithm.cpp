@@ -7,7 +7,7 @@
 //
 
 #include "particle_based_simulation/additional/profile/simulation_time_profile.hpp"
-#include "particle_based_simulation/simulation/algorithm/particle_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/general/particle_algorithm.hpp"
 
 void fj::Algorithm::startProfiling()
 {

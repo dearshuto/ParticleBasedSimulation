@@ -65,6 +65,8 @@ private:
     
     void analyze()override;
     
+    void updateParticleState();
+    
     void applyNormalComponentContactForce(const ParticlesContactInfo& contactInfo, const btScalar overlap);
     
     void applyTangentialComponentContactForce(const ParticlesContactInfo& contactInfo);

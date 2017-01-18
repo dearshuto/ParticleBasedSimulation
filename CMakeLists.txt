@@ -127,8 +127,10 @@ add_library(particle_based_simulation STATIC
 	${primitive_files}
 	${bullet_algorithm_files}
 	${additional_procedure_files}
-	${povray_files}
-	${shape_2d_files}
+	${collision_dispatcher_files}
+	${math_files}
+	${particle_files}
+	${world_files}
 )
 
 

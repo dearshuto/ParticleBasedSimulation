@@ -26,10 +26,10 @@ public:
     virtual~OverlapParticle() = default;
     
     /**
-     * @param overlap オーバーラップが発生する半径
-     * @param mass 質量[kg]
+     * @param overlap オーバーラップが発生する半径.
+     * @param mass 質量[kg].
      * @note 引数で指定したオーバーラップは他の粒子のオーバーラップと衝突することに留意してください.
-     *             例えばオーバーラップ0.5で作られたパーティクル同士の衝突を検知するのは, 粒子間の距離が 0.5+0.5→1.0 の時です*/
+     *             例えばオーバーラップ0.5で作られたパーティクル同士の衝突を検知するのは, 粒子間の距離が 0.5+0.5→1.0 の時です.*/
     OverlapParticle(const btScalar overlap, const btScalar mass)
     : Super(mass, std::unique_ptr<fj::OverlapParticleShape>(new fj::OverlapParticleShape(overlap)))
     {

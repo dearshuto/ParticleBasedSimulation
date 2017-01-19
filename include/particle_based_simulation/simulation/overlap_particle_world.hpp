@@ -54,7 +54,7 @@ public:
     
     {
         // btGhostObjectがオーバラップしたオブジェクトを検知できるようにコールバックを登録しておく
-        m_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+       // m_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
     }
     
     virtual~OverlapParticleWorld() = default;

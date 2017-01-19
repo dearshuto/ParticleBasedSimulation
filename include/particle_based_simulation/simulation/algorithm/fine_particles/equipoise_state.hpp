@@ -9,7 +9,7 @@
 #ifndef equipoise_state_hpp
 #define equipoise_state_hpp
 
-#include "collapse_state.hpp"
+#include "fine_particle_state.hpp"
 
 namespace fj {
     class EquipoiseState;
@@ -20,7 +20,7 @@ class fj::EquipoiseState : public fj::FineParticleState
 {
 public:
     EquipoiseState() = default;
-    ~EquipoiseState() = default;
+    virtual~EquipoiseState() = default;
     
     void update(fj::Particle<fj::RheorogyParameter>* particle)override;
 };

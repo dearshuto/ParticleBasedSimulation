@@ -70,15 +70,6 @@ FILE(GLOB_RECURSE shape_2d_files
 )
 
 ## Additional
-FILE(GLOB_RECURSE additional_procedure_files
-	${Include_Folder}/additional_procedure.hpp
-	${Src_Folder}/additional/additional_procedure.cpp
-	${Include_Folder}/particle_information_profiler.hpp
-	${Src_Folder}/additional/particle_information_profiler.cpp
-	${Include_Folder}/additional/rheorogy_simulator_profiler.hpp
-	${Src_Folder}/additional/rheorogy_simulator_profiler.cpp
-)
-
 FILE(GLOB_RECURSE povray_files
 	${Include_Folder}/additional/povray/povray_output.hpp
 	${Src_Folder}/additional/povray/povray_output.cpp
@@ -89,6 +80,16 @@ FILE(GLOB_RECURSE profile_files
 	${Src_Folder}/additional/profile/*.cpp
 )
 
+FILE(GLOB_RECURSE additional_procedure_files
+	${Include_Folder}/additional_procedure.hpp
+	${Src_Folder}/additional/additional_procedure.cpp
+	${Include_Folder}/particle_information_profiler.hpp
+	${Src_Folder}/additional/particle_information_profiler.cpp
+	${Include_Folder}/additional/rheorogy_simulator_profiler.hpp
+	${Src_Folder}/additional/rheorogy_simulator_profiler.cpp
+	${povray_files}
+	${profile_files}
+)
 
 ## IDEの表示における階層の設定
 SOURCE_GROUP(simulation\\ FILES ${simulation_files})

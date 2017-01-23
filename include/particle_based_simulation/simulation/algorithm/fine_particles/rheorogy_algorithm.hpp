@@ -67,7 +67,7 @@ private:
     
     void updateParticleState();
     
-    void applyNormalComponentContactForce(const ParticlesContactInfo& contactInfo, const btScalar overlap);
+    void applyNormalComponentContactForce(const ParticlesContactInfo& contactInfo);
     
     void applyTangentialComponentContactForce(const ParticlesContactInfo& contactInfo);
     

@@ -19,18 +19,9 @@ void fj::RheorogyAlgorithm::accumulateParticleForce()
     while(pairIterator->hasNext())
     {
         const auto kContactInfo = pairIterator->next();
-        const auto particle1 = kContactInfo.Particle1;
-        const auto particle2 = kContactInfo.Particle2;
-        const auto kRadiusSum = particle1->getParameter().Radius + particle2->getParameter().Radius;
-        const bool kIsOverlap = kContactInfo.kDistance < kRadiusSum;
         
-        if ( kIsOverlap )
-        {
-            const auto kOverlap = kRadiusSum - kContactInfo.kDistance;
-            
-            applyNormalComponentContactForce(kContactInfo, kOverlap);
-            applyTangentialComponentContactForce(kContactInfo);
-        }
+        applyNormalComponentContactForce(kContactInfo);
+        applyTangentialComponentContactForce(kContactInfo);
     }
 }
 
@@ -63,7 +54,7 @@ void fj::RheorogyAlgorithm::updateParticleState()
     }
 }
 
-void fj::RheorogyAlgorithm::applyNormalComponentContactForce(const ParticlesContactInfo &contactInfo, const btScalar overlap)
+void fj::RheorogyAlgorithm::applyNormalComponentContactForce(const ParticlesContactInfo &contactInfo)
 {
     constexpr double kPI = 3.141592653589793238462643383279502884;
     auto particle1 = contactInfo.Particle1;

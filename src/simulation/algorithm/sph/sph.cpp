@@ -11,6 +11,8 @@
 #include <functional>
 #include "particle_based_simulation/simulation/algorithm/sph/sph.hpp"
 
+ const float fj::SPH::kGasConstant = 1;
+
 void fj::SPH::accumulateParticleForce()
 {
     initializeProperty();
@@ -40,8 +42,14 @@ void fj::SPH::applyForce()
     while(iterator->hasNext())
     {
         const auto pair = iterator->next();
-        applyPressureTerm(pair);
-        applyViscosityTerm(pair);
+        computePressureTerm(pair);
+        computeViscosityTerm(pair);
+    }
+    
+    for (auto& particle : getWorldPtr()->getParticles())
+    {
+        const auto& kParameter = particle->getParameter();
+        particle->applyCentralForce(kParameter.Pressure + kParameter.Viscosity);
     }
 }
 
@@ -74,7 +82,7 @@ void fj::SPH::updateParticleDensity()
 
 }
 
-void fj::SPH::applyPressureTerm(const ParticlesContactInfo &contactInfo)
+void fj::SPH::computePressureTerm(const ParticlesContactInfo &contactInfo)
 {
     // Spikyカーネル
     const auto Spiky = [](const float r, const float h){
@@ -83,15 +91,39 @@ void fj::SPH::applyPressureTerm(const ParticlesContactInfo &contactInfo)
     
     auto particle1 = contactInfo.Particle1;
     auto particle2 = contactInfo.Particle2;
+    const auto& kDirection12 = contactInfo.kDirection12;
+    const auto kDirection21 = -kDirection12;
     const auto h = particle1->getOverlapRange();
     const auto r = contactInfo.kDistance;
 
-    particle1->getParameterPtr()->Pressure += contactInfo.kDirection12
-    * particle1->getParameterPtr()->InverseDensity
-    * Spiky(r, h);
+    const auto p1 = kGasConstant * (particle1->getParameterPtr()->Density - getDensity());
+    const auto p2 = kGasConstant * (particle2->getParameterPtr()->Density - getDensity());
+    
+    // 共通の数値は計算しておく
+    const auto kCoefficient = (p1 + p2) * Spiky(r, h);
+
+    particle1->getParameterPtr()->Pressure += kDirection12
+    * particle2->getMass()
+    * 0.5 * particle2->getParameter().InverseDensity
+    * kCoefficient;
+    
+    particle2->getParameterPtr()->Pressure += kDirection21
+    * particle1->getMass()
+    * 0.5 * particle1->getParameter().InverseDensity
+    * kCoefficient;
 }
 
-void fj::SPH::applyViscosityTerm(const ParticlesContactInfo &contactInfo)
+void fj::SPH::computeViscosityTerm(const ParticlesContactInfo &contactInfo)
 {
 
+}
+
+float fj::SPH::getDensity()const
+{
+    return m_density;
+}
+
+void fj::SPH::setDensity(const float density)
+{
+    m_density = density;
 }

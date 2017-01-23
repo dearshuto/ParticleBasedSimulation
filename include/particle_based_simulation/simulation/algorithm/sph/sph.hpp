@@ -20,8 +20,9 @@ struct fj::SPHParameter
 {
     float Density;
     float InverseDensity;
+    float ViscosityCoefficient;
     btVector3 Pressure;
-    float Viscosity;
+    btVector3 Viscosity;
 };
 
 class fj::SPH : public fj::ParticleAlgorithm<fj::SPHParameter>
@@ -41,9 +42,17 @@ private:
     
     void accumulateParticleForce()override;
     
-    void applyPressureTerm(const ParticlesContactInfo& contactInfo);
+    void computePressureTerm(const ParticlesContactInfo& contactInfo);
     
-    void applyViscosityTerm(const ParticlesContactInfo& contactInfo);
+    void computeViscosityTerm(const ParticlesContactInfo& contactInfo);
+    
+public:
+    float getDensity()const;
+    void setDensity(const float density);
+    
+    static const float kGasConstant;
+private:
+    float m_density;
 };
 
 #endif /* sph_hpp */

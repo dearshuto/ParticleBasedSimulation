@@ -13,9 +13,36 @@
 
 void fj::SPH::accumulateParticleForce()
 {
+    initializeProperty();
+    
     updateParticleDensity();
     
     applyForce();
+}
+
+void fj::SPH::initializeProperty()
+{
+    for (auto& particle: getWorldPtr()->getParticles())
+    {
+        // 密度は自分の質量で初期化
+        particle->getParameterPtr()->Density = particle->getMass();
+        
+        // 圧力は0で初期化
+        particle->getParameterPtr()->Pressure = {0.0, 0.0, 0.0};
+    }
+
+}
+
+void fj::SPH::applyForce()
+{
+    auto iterator = getWorldPtr()->overlapParticlePairIterator();
+    
+    while(iterator->hasNext())
+    {
+        const auto pair = iterator->next();
+        applyPressureTerm(pair);
+        applyViscosityTerm(pair);
+    }
 }
 
 void fj::SPH::updateParticleDensity()
@@ -24,12 +51,6 @@ void fj::SPH::updateParticleDensity()
     const auto Poly6 = [](const float r, const float h){
         return 315 * std::pow(h*h-r*r, 3) /(64*M_PI*std::pow(h, 9));
     };
-
-    // 密度を自分の質量で初期化
-    for (auto& particle: getWorldPtr()->getParticles())
-    {
-        particle->getParameterPtr()->Density = particle->getMass();
-    }
 
     // 近傍粒子から密度を算出する.
     auto iterator = getWorldPtr()->overlapParticlePairIterator();
@@ -53,30 +74,12 @@ void fj::SPH::updateParticleDensity()
 
 }
 
-void fj::SPH::applyForce()
-{
-    auto iterator = getWorldPtr()->overlapParticlePairIterator();
-    
-    while(iterator->hasNext())
-    {
-        const auto pair = iterator->next();
-        applyPressureTerm(pair);
-        applyViscosityTerm(pair);
-    }
-}
-
 void fj::SPH::applyPressureTerm(const ParticlesContactInfo &contactInfo)
 {
     // Spikyカーネル
     const auto Spiky = [](const float r, const float h){
         return -45 * (std::pow(h-r, 2)) / (M_PI * std::pow(h, 6));
     };
-    
-    // 圧力の初期化
-    for (auto& particle : getWorldPtr()->getParticles())
-    {
-        particle->getParameterPtr()->Pressure = {0.0, 0.0, 0.0};
-    }
     
     auto particle1 = contactInfo.Particle1;
     auto particle2 = contactInfo.Particle2;

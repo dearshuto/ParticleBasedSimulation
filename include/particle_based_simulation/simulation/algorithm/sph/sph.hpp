@@ -33,6 +33,8 @@ public:
     virtual~SPH() = default;
     
 private:
+    void initializeProperty();
+    
     void updateParticleDensity();
     
     void applyForce();

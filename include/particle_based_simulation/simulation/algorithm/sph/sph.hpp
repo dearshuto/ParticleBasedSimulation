@@ -18,17 +18,30 @@ namespace fj {
 
 struct fj::SPHParameter
 {
+    float Density;
+    float InverseDensity;
+    btVector3 Pressure;
     float Viscosity;
 };
 
 class fj::SPH : public fj::ParticleAlgorithm<fj::SPHParameter>
 {
     typedef fj::ParticleAlgorithm<fj::SPHParameter> Super;
+    typedef fj::Particle<fj::SPHParameter> SPHParticle;
 public:
     SPH() = default;
     virtual~SPH() = default;
     
+private:
+    void updateParticleDensity();
+    
+    void applyForce();
+    
     void accumulateParticleForce()override;
+    
+    void applyPressureTerm(const ParticlesContactInfo& contactInfo);
+    
+    void applyViscosityTerm(const ParticlesContactInfo& contactInfo);
 };
 
 #endif /* sph_hpp */

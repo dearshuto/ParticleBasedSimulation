@@ -112,9 +112,7 @@ bool fj::POVRayOutput::saveToFile(const std::string &filename)const
     while (iterator->hasNext())
     {
         const auto& particle = iterator->next();
-        btTransform trans;
-        particle.getMotionState()->getWorldTransform(trans);
-        const auto position = trans.getOrigin();
+        const auto position = particle.getPosition();
         POV += "sphere{";
 
         POV += std::string("<") + std::to_string(position.x()) + "," + std::to_string(position.y()) + "," + std::to_string(position.z()) + std::string(">");

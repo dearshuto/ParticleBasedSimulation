@@ -156,7 +156,7 @@ public:
     /** パーティクルを追加する.  */
     void addParticle(std::unique_ptr<Particle> particle)
     {
-        getWorldPtr()->addRigidBody(particle.get());
+        getWorldPtr()->addRigidBody(particle->getRigidBodyPtr().get());
         m_particles.push_back(std::move(particle));
     }
     

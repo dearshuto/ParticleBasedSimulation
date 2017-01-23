@@ -55,7 +55,7 @@ void fj::Mesh::updateMeshShape(std::unique_ptr<btTriangleIndexVertexArray> meshD
     btGImpactMeshShape* meshShape = new btGImpactMeshShape(meshData.get());
     meshShape->updateBound();
     std::unique_ptr<btCollisionShape> collisionShape(meshShape);
-    setCollisionShapeWithMemoryManagement(std::move(collisionShape));
+    setCollisionShape(std::move(collisionShape));
     
     // 頂点情報も取っておく
     m_vertexArray = std::move(meshData);

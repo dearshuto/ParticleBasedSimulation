@@ -49,6 +49,11 @@ FILE(GLOB_RECURSE fine_particles_algorithm_files
 	${Src_Folder}/simulation/algorithm/fine_particles/*.cpp
 )
 
+FILE(GLOB_RECURSE sph_files
+	${Include_Folder}/simulation/algorithm/sph/*.hpp
+	${Src_Folder}/simulation/algorithm/sph/*.cpp
+)
+
 FILE(GLOB_RECURSE collision_object_files
 	${Include_Folder}/simulation/collision_object/collision_object.hpp
 	${Src_Folder}/simulation/collision_object/collision_object.cpp
@@ -96,6 +101,7 @@ FILE(GLOB_RECURSE additional_procedure_files
 SOURCE_GROUP(simulation\\ FILES ${simulation_files})
 SOURCE_GROUP(simulation\\algorithm\\general FILES ${general_algorithm_files})
 SOURCE_GROUP(simulation\\algorithm\\fine_particles FILES ${fine_particles_algorithm_files})
+SOURCE_GROUP(simulation\\algorithm\\sph FILES ${sph_files})
 SOURCE_GROUP(simulation\\collision_object FILES ${collision_object_files})
 SOURCE_GROUP(simulation\\collision_object\\particle FILES ${particle_files})
 SOURCE_GROUP(simulation\\collision_object\\mesh FILES ${mesh_files})
@@ -118,6 +124,7 @@ SET(algorithm_files
 	${general_algorithm_files}
 	${fine_particles_algorithm_files}
 	${simulation_files}
+	${sph_files}
 )
 
 add_library(particle_based_simulation STATIC

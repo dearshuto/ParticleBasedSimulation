@@ -14,7 +14,6 @@
 #include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
 #include "particle_based_simulation/simulation/algorithm/fine_particles/mohr_stress_circle.hpp"
 #include "particle_based_simulation/simulation/algorithm/general/particle_algorithm.hpp"
-#include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
 
 namespace fj {
     struct RheorogyParameter;

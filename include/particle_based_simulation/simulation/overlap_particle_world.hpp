@@ -15,6 +15,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "particle_based_simulation/simulation/bullet_algorithm/fine_particle_simulation_collision_configuration.hpp"
+#include "particle_based_simulation/simulation/collision_object/collision_object.hpp"
 
 namespace fj {
     class OverlapParticle;
@@ -68,7 +69,7 @@ public:
     /** シミュレーション対象を追加する.
      * この関数を使って登録した剛体は、プログラム側で解放されます
      * @param body Particle以外の剛体 */
-    void addRigidBody(std::unique_ptr<btRigidBody> body);
+    void addRigidBody(std::unique_ptr<fj::CollisionObject> body);
     
     void setGravity(const btVector3& gravity)
     {
@@ -90,7 +91,7 @@ private:
     //---------------- Bullet Physicsのフレームワークを利用するためのインスタンス ----------------------//
     /** Bullet Physicsは生ポインタで全ての処理をするので, メモリの管理はユーザ側でしなくてはならない
      * Bullet Physicsの中でシミュレーション対象となる剛体のメモリ管理用のコンテナ */
-    std::vector<std::unique_ptr<btRigidBody>> m_rigidBody;
+    std::vector<std::unique_ptr<fj::CollisionObject>> m_rigidBody;
     
     // Bullet Physicsを利用するために最低限必要なインスタンス
     std::unique_ptr<btCollisionConfiguration> m_collisionConfiguration;

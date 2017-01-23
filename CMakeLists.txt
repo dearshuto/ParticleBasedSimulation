@@ -31,6 +31,7 @@ FILE(GLOB_RECURSE simulation_files
 	${Src_Folder}/simulation/particle_world.cpp
 	${Include_Folder}/simulation/overlap_particle_world.hpp
 	${Src_Folder}/simulation/overlap_particle_world.cpp
+	${Include_Folder}/simulation/general_particle_world.hpp
 )
 
 FILE(GLOB_RECURSE particle_files

@@ -36,13 +36,9 @@ public:
     Particle(const btScalar overlap, const btScalar mass)
     : Super(overlap, mass)
     {
-        // Bullet Physicsに「この物体には独自のアルゴリズムを適用する」と判別させるためのフラグを立てておく
-        // 主な利用方法はアップキャスト.
-        m_internalType |= btCollisionObject::CO_USER_TYPE;
+        getRigidBodyPtr()->setUserPointer(this);
     }
 
-    
-    
     
     //---------- Public Static Functions --------------------------------------------------------------------------------------------------------------------
     
@@ -55,15 +51,15 @@ public:
     
     static Self*const Upcast(btCollisionObject*const object)
     {
-        if (object->getInternalType()&btCollisionObject::CO_USER_TYPE)
-            return static_cast<Particle*const>(object);
+        if(object->getCollisionShape()->getShapeType()&BroadphaseNativeTypes::CUSTOM_POLYHEDRAL_SHAPE_TYPE)
+            return static_cast<Self*const>(object->getUserPointer());
         return nullptr;
     }
 
     static const Self*const Upcast(const btCollisionObject*const object)
     {
-        if (object->getInternalType()&btCollisionObject::CO_USER_TYPE)
-            return static_cast<Particle*const>(object);
+        if(object->getCollisionShape()->getShapeType()&BroadphaseNativeTypes::CUSTOM_POLYHEDRAL_SHAPE_TYPE)
+            return static_cast<const Self*const>(object->getUserPointer());
         return nullptr;
     }
 

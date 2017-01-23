@@ -17,8 +17,8 @@ void fj::OverlapParticleWorld::updateAllObjectsPosition(const btScalar timestep)
     m_world->stepSimulation(timestep, 1/*max substeps*/, timestep);
 }
 
-void fj::OverlapParticleWorld::addRigidBody(std::unique_ptr<btRigidBody> body)
+void fj::OverlapParticleWorld::addRigidBody(std::unique_ptr<fj::CollisionObject> body)
 {
-    getWorldPtr()->addRigidBody(body.get());
+    getWorldPtr()->addRigidBody(body->getRigidBodyPtr().get());
     m_rigidBody.push_back( std::move(body) );
 }

@@ -71,6 +71,8 @@ public:
      * @param body Particle以外の剛体 */
     void addRigidBody(std::unique_ptr<fj::CollisionObject> body);
     
+	void addRigidBody(std::unique_ptr<btRigidBody> btBody);
+
     void setGravity(const btVector3& gravity)
     {
         m_world->setGravity(gravity);
@@ -93,6 +95,9 @@ private:
      * Bullet Physicsの中でシミュレーション対象となる剛体のメモリ管理用のコンテナ */
     std::vector<std::unique_ptr<fj::CollisionObject>> m_rigidBody;
     
+	// btRigidBodyを生で保持する用
+	std::vector<std::unique_ptr<btRigidBody>> m_btRigidBody;
+
     // Bullet Physicsを利用するために最低限必要なインスタンス
     std::unique_ptr<btCollisionConfiguration> m_collisionConfiguration;
     std::unique_ptr<btDispatcher> m_dispatcher;

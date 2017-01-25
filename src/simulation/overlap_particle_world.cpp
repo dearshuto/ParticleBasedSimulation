@@ -22,3 +22,9 @@ void fj::OverlapParticleWorld::addRigidBody(std::unique_ptr<fj::CollisionObject>
     getWorldPtr()->addRigidBody(body->getRigidBodyPtr().get());
     m_rigidBody.push_back( std::move(body) );
 }
+
+void fj::OverlapParticleWorld::addRigidBody(std::unique_ptr<btRigidBody> btBody)
+{
+	getWorldPtr()->addRigidBody(btBody.get());
+	m_btRigidBody.push_back(std::move(btBody));
+}

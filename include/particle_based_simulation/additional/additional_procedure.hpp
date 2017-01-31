@@ -17,7 +17,8 @@ namespace fj {
     class AdditionalProcedure;
 }
 
-/** fj::FineParticleWorld::stepSimulation から呼ばれる処理 */
+/// fj::FineParticleWorld::stepSimulation から呼ばれる処理.
+/** シミュレーションのプロファイリングなど, シミュレーションとは直接関係しない処理を提供する. */
 class fj::AdditionalProcedure
 {
 protected:

@@ -22,7 +22,7 @@ namespace fj {
     class OverlapParticleWorld;
 }
 
-/// Bullet Physics のフレームワークをラップしたクラス.
+/// Bullet Physics のフレームワークをラップした抽象クラス.
 /** 登録した剛体に対して, 「衝突判定および検出」, 「アクセスするインタフェースの提供」, 「位置更新」の3つを担う.
  * 「粒子ー剛体」の衝突は, 粒子を剛体の球としてこのクラス内で力学計算をするが, 「粒子ー粒子」の衝突は検出はするが実際の力学計算は行わない.
  * 実際の粒子シミュレーションは fj::Algorithm を継承したクラスに任せてある.
@@ -30,11 +30,13 @@ namespace fj {
 class fj::OverlapParticleWorld
 {
 public:
+    /// 位置更新が行われる空間
     enum class Dimension : uint8_t
     {
+        // 3D空間
         ThreeD,
         
-        /// x-y平面の移動のみのシミュレーションを実行する
+        /// X-Y平面
         TwoD,
     };
 public:
@@ -61,8 +63,7 @@ public:
               )
     
     {
-        // btGhostObjectがオーバラップしたオブジェクトを検知できるようにコールバックを登録しておく
-       // m_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+        
     }
     
     virtual~OverlapParticleWorld() = default;
@@ -79,8 +80,10 @@ public:
      * @param body Particle以外の剛体 */
     void addRigidBody(std::unique_ptr<fj::CollisionObject> body);
     
+    /** Bullet Physics のインスタンスを直接登録する. */
 	void addRigidBody(std::unique_ptr<btRigidBody> btBody);
 
+    /** 位置更新する空間を設定する. */
     void switchSimulatorDimension(const Dimension dimension);
     
     void setGravity(const btVector3& gravity)

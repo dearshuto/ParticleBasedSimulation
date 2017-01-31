@@ -15,6 +15,9 @@ namespace fj {
     class FineFineCollisionAlgorithm;
 }
 
+/// 粒子同士の衝突が発生したときに Bullet Physics のフレームワークから呼び出されるアルゴリズム.
+/** このクラスの役割は, Bullet Physics のフレームワークから独自のアルゴリズムを分離することです.
+ * なのでこのクラスは特別何かをするわけではありません. */
 class fj::FineFineCollisionAlgorithm : public btActivatingCollisionAlgorithm
 {
     typedef btActivatingCollisionAlgorithm Super;

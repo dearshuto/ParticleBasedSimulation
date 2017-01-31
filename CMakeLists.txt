@@ -13,6 +13,9 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/vendor/bullet3/src)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/vendor/bullet3/Extras)
 add_subdirectory(vendor/bullet3)
 
+## eigen
+include_directories(${CMAKE_CURRENT_LIST_DIR}/vendor/Eigen)
+
 
 ## プロジェクトに含むソースコードのトラッキング
 SET(Include_Folder ${CMAKE_SOURCE_DIR}/include/particle_based_simulation/)

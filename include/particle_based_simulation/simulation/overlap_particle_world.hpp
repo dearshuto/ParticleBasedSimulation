@@ -30,6 +30,14 @@ namespace fj {
 class fj::OverlapParticleWorld
 {
 public:
+    enum class Dimension : uint8_t
+    {
+        ThreeD,
+        
+        /// x-y平面の移動のみのシミュレーションを実行する
+        TwoD,
+    };
+public:
     /// ワールド内の粒子を走査するイテレータ
     class Iterator
     {
@@ -73,6 +81,8 @@ public:
     
 	void addRigidBody(std::unique_ptr<btRigidBody> btBody);
 
+    void switchSimulatorDimension(const Dimension dimension);
+    
     void setGravity(const btVector3& gravity)
     {
         m_world->setGravity(gravity);
@@ -90,6 +100,8 @@ protected:
     }
     
 private:
+    Dimension m_dimension;
+    
     //---------------- Bullet Physicsのフレームワークを利用するためのインスタンス ----------------------//
     /** Bullet Physicsは生ポインタで全ての処理をするので, メモリの管理はユーザ側でしなくてはならない
      * Bullet Physicsの中でシミュレーション対象となる剛体のメモリ管理用のコンテナ */

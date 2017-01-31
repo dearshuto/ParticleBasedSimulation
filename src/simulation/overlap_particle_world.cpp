@@ -10,6 +10,22 @@
 
 void fj::OverlapParticleWorld::updateAllObjectsPosition(const btScalar timestep)
 {
+    // 2DのときはZ方向の力を0にする
+    if (m_dimension == Dimension::TwoD)
+    {
+        auto& objects = m_world->getCollisionObjectArray();
+        for (int i = 0; i < objects.size(); i++)
+        {
+            auto rigidBody = btRigidBody::upcast(objects[i]);
+            if (rigidBody)
+            {
+                btVector3 force = rigidBody->getTotalForce();
+                force.setZ(0);
+                rigidBody->applyCentralForce(force);
+            }
+        }
+    }
+    
     // Bullet Physics はスイープを適用してくれるのでとても安定した位置更新ができる.
     // ここで, stepSimulationの第一引数が更新する時間幅であるが,
     // 第三引数で指定した時間幅まで更新時間が累積しないと位置を更新してくれない.
@@ -27,4 +43,9 @@ void fj::OverlapParticleWorld::addRigidBody(std::unique_ptr<btRigidBody> btBody)
 {
 	getWorldPtr()->addRigidBody(btBody.get());
 	m_btRigidBody.push_back(std::move(btBody));
+}
+
+void fj::OverlapParticleWorld::switchSimulatorDimension(const fj::OverlapParticleWorld::Dimension dimension)
+{
+    m_dimension = dimension;
 }

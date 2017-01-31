@@ -9,6 +9,7 @@
 #ifndef mesh_hpp
 #define mesh_hpp
 
+#include <array>
 #include <memory>
 #include <string>
 #include <vector>
@@ -39,6 +40,25 @@ public:
     {
         // コンストラクタの中ではなくて、別の関数でメッシュを読み込ませることにする.
     }
+    
+    class Iterator
+    {
+    public:
+        Iterator() = default;
+        ~Iterator() = default;
+        Iterator(const fj::Mesh*const parent)
+        : m_parent(parent)
+        {
+            
+        }
+        bool hasNext()const;
+        std::array<btVector3, 3> next();
+    private:
+        const fj::Mesh*const m_parent;
+        int m_index;
+    };
+    
+    Iterator iterator()const;
     
     /** ファイルシステムから Wavefront OBJ 形式のファイルを読み込む
      * @return メッシュの読み込みが成功したかどうか */

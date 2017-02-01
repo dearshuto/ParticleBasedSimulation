@@ -15,8 +15,10 @@ namespace fj {
 
 namespace Eigen {
     typedef Matrix<float, 3, 1> Vector3f;
+    typedef Matrix<int, 3, 1> Vector3i;
 }
 
+/// 正方形の格子が集まった正方形のグリッド
 class fj::Grid
 {
 protected:
@@ -40,8 +42,15 @@ protected:
 protected:
     unsigned int convertPositionToIndex(const Eigen::Vector3f& position)const;
     
+    /// グリッドの講師の数を計算する
     unsigned int computeAllDataSize()const;
     
+    /// Rangeにいくつの格子が存在するかを計算する.
+    /** @param range getrRangeX(), getRangeY(), getRangeZ() のどれか */
+    unsigned int computeGridNum(const Range& range)const;
+    
+    /// すべての要素を整数型に丸め込んだベクトルを生成する.
+    Eigen::Vector3i convertRoundedVector(const Eigen::Vector3f& vector)const;
 public:
     const Range& getRangeX()const
     {

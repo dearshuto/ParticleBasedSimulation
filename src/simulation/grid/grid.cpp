@@ -11,6 +11,25 @@
 #include <Eigen/Core>
 #include "particle_based_simulation/simulation/grid/grid.hpp"
 
+bool fj::Grid::isValid(const Eigen::Vector3f &position)const
+{
+    // ある値がある範囲内にあるか判定する
+    // 境界で不安定にならないように, 等号のときもfalseを返すようにしてある.
+    const auto isValidRange = [](const float value, const fj::Grid::Range& range){
+        if ((range.Min < value) && ( value < range.Max))
+        {
+            return true;
+        }
+        return false;
+    };
+    
+    const bool kHasValidX = isValidRange(position.x(), getRangeX());
+    const bool kHasValidY = isValidRange(position.y(), getRangeY());
+    const bool kHasValidZ = isValidRange(position.z(), getRangeZ());
+    
+    return kHasValidX && kHasValidY && kHasValidZ;
+}
+
 unsigned int fj::Grid::convertPositionToIndex(const Eigen::Vector3f &position)const
 {
     // グリッドの最小値をとる点を原点に持ってきたときの相対位置に変換する.
@@ -18,11 +37,13 @@ unsigned int fj::Grid::convertPositionToIndex(const Eigen::Vector3f &position)co
     const float kRelativeMinY = -getRangeY().Min;
     const float kRelativeMinZ = -getRangeZ().Min;
     const auto kRelativePosition = position + Eigen::Vector3f{kRelativeMinX, kRelativeMinY, kRelativeMinZ};
-    const auto kRoundedRelativePosition = convertRoundedVector(kRelativePosition);
-
-    return kRoundedRelativePosition.x()
-    + computeGridNum(getRangeX()) * kRoundedRelativePosition.y()
-    + computeGridNum(getRangeX()) * computeGridNum(getRangeY()) * kRoundedRelativePosition.z();
+    const auto kIndexX = std::floor(kRelativePosition.x() / getGridSize());
+    const auto kIndexY = std::floor(kRelativePosition.y() / getGridSize());
+    const auto kIndexZ = std::floor(kRelativePosition.z() / getGridSize());
+    
+    return kIndexX
+    + computeGridNum(getRangeX()) * kIndexY
+    + computeGridNum(getRangeX()) * computeGridNum(getRangeY()) * kIndexZ;
 }
 
 unsigned int fj::Grid::computeAllDataSize()const
@@ -36,7 +57,7 @@ unsigned int fj::Grid::computeAllDataSize()const
 
 unsigned int fj::Grid::computeGridNum(const fj::Grid::Range &range)const
 {
-    return getResolution() * std::floor(range.Max) - std::floor(range.Min);
+    return std::floor((range.Max - range.Min) / getGridSize());
 }
 
 Eigen::Vector3i fj::Grid::convertRoundedVector(const Eigen::Vector3f &vector)const

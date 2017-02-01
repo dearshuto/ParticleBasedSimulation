@@ -11,17 +11,21 @@
 
 int main(int argc, char** argv)
 {
-    fj::SparseGrid<bool> booleanGrid{{0.f, 1.f}, {0.f, 1.f}, {0.f, 1.f}};
-    booleanGrid.at({0, 0, 0}) = true;
+    fj::SparseGrid<bool> booleanGrid{{1.f, 0.f}, {1.f, 0.f}, {1.f, 0.f}, 0.1};
+    const Eigen::Vector3f kTestPosition{0.1, 0.01, 0.01};
+    
+    if (booleanGrid.isValid(kTestPosition))
+        booleanGrid.at(kTestPosition) = true;
+    else
+        std::cout << "not valid" << std::endl;
     
     for (auto iterator = booleanGrid.iterator(); iterator; ++iterator)
     {
         if(iterator.value())
         {
-            std::cout << "non zero!"<< std::endl;
+            std::cout << iterator.index() << ": is non zero!"<< std::endl;
         }
     }
-
     
     return 0;
 }

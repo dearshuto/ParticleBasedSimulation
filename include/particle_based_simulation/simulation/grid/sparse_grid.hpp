@@ -26,8 +26,8 @@ public:
     SparseGrid() = default;
     virtual~SparseGrid() = default;
     
-    SparseGrid(const Range& rangeX, const Range& rangeY, const Range& rangeZ)
-    : Super(rangeX, rangeY, rangeZ)
+    SparseGrid(const Range& rangeX, const Range& rangeY, const Range& rangeZ, const float gridSize = 1.0f)
+    : Super(rangeX, rangeY, rangeZ, gridSize)
     {
         m_data.resize(computeAllDataSize());
     }

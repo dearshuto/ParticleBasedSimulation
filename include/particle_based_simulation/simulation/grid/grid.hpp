@@ -27,19 +27,24 @@ protected:
         float Max;
         float Min;
     };
-public:
-    Grid() = delete;
-    virtual~Grid() = default;
-protected:
-    Grid(const Range& rangeX, const Range& rangeY, const Range& rangeZ, const float resolution = 1.0)
+
+    /// すべてのRangeはsizeよりも大きな値をであること
+    Grid(const Range& rangeX, const Range& rangeY, const Range& rangeZ, const float size = 1.0)
     : m_rangeX(rangeX)
     , m_rangeY(rangeY)
     , m_rangeZ(rangeZ)
-    , m_resolution(resolution)
+    , m_gridSize(size)
     {
         
     }
+
+public:
+    Grid() = delete;
+    virtual~Grid() = default;
+    
+    bool isValid(const Eigen::Vector3f& position)const;
 protected:
+        
     unsigned int convertPositionToIndex(const Eigen::Vector3f& position)const;
     
     /// グリッドの講師の数を計算する
@@ -65,15 +70,15 @@ public:
         return m_rangeZ;
     }
     
-    unsigned int getResolution()const
+    float getGridSize()const
     {
-        return m_resolution;
+        return m_gridSize;
     }
 private:
     Range m_rangeX;
     Range m_rangeY;
     Range m_rangeZ;
-    unsigned int m_resolution;
+    float m_gridSize;
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

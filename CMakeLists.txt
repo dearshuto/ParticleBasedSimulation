@@ -16,12 +16,14 @@ add_subdirectory(vendor/bullet3)
 ## eigen
 include_directories(${CMAKE_CURRENT_LIST_DIR}/vendor/Eigen)
 
+
 # インクルードフォルダを相対パスの検索対象に設定する
 IF(WIN32)
 add_definitions("/I${CMAKE_SOURCE_DIR}/include")
 ELSE()
 add_definitions("-I ${CMAKE_SOURCE_DIR}/include")
 ENDIF()
+
 
 ## プロジェクトに含むソースコードのトラッキング
 # includeフォルダとsrcフォルダにあるファイルのみを対象にする
@@ -45,6 +47,7 @@ foreach(FILE ${ALL_FILES})
 
   source_group("${GROUP}" FILES "${FILE}")
 endforeach()
+
 
 add_library(particle_based_simulation STATIC
 	${ALL_FILES}

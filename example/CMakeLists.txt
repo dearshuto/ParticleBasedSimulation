@@ -5,3 +5,11 @@ target_link_libraries( povray_example
 	BulletCollision
 	LinearMath
 )
+
+add_executable(grid_example grid_example.cpp)
+target_link_libraries( grid_example
+	particle_based_simulation
+	BulletDynamics
+	BulletCollision
+	LinearMath
+)

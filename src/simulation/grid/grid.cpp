@@ -49,7 +49,7 @@ unsigned int fj::Grid::convertPositionToIndex(const Eigen::Vector3f &position)co
     const float kRelativeMinX = -getRangeX().Min;
     const float kRelativeMinY = -getRangeY().Min;
     const float kRelativeMinZ = -getRangeZ().Min;
-    const auto kRelativePosition = position + Eigen::Vector3f{kRelativeMinX, kRelativeMinY, kRelativeMinZ};
+    const Eigen::Vector3f kRelativePosition = position + Eigen::Vector3f{kRelativeMinX, kRelativeMinY, kRelativeMinZ};
     const auto kIndexX = std::floor(kRelativePosition.x() / getGridSize());
     const auto kIndexY = std::floor(kRelativePosition.y() / getGridSize());
     const auto kIndexZ = std::floor(kRelativePosition.z() / getGridSize());

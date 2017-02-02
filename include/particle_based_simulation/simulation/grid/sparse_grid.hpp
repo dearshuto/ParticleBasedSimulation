@@ -45,7 +45,16 @@ public:
     {
         return m_data.coeffRef(convertPositionToIndex(position));
     }
-
+    const T& at(const Eigen::Index& index)const
+    {
+        return m_data.coeffRef(index);
+    }
+    T& at(const Eigen::Index& index)
+    {
+        return m_data.coeffRef(index);
+    }
+    
+    
 private:
     Eigen::SparseVector<T> m_data;
 public:

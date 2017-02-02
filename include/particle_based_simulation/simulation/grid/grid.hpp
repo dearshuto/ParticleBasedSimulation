@@ -43,9 +43,12 @@ public:
     virtual~Grid() = default;
     
     bool isValid(const Eigen::Vector3f& position)const;
-protected:
+    
+    Eigen::Vector3f convertIndexToPosition(const Eigen::Index index)const;
         
     unsigned int convertPositionToIndex(const Eigen::Vector3f& position)const;
+    
+protected:
     
     /// グリッドの講師の数を計算する
     unsigned int computeAllDataSize()const;

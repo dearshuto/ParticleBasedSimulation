@@ -30,6 +30,18 @@ bool fj::Grid::isValid(const Eigen::Vector3f &position)const
     return kHasValidX && kHasValidY && kHasValidZ;
 }
 
+Eigen::Vector3f fj::Grid::convertIndexToPosition(const Eigen::Index index)const
+{
+    const auto GridNumX = computeGridNum(getRangeX());
+    const auto GridNumY = computeGridNum(getRangeY());
+    
+    int z = index / (GridNumX * GridNumY);
+    int y = 0;
+    int x = 0;
+    
+    return getGridSize() * Eigen::Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)};
+}
+
 unsigned int fj::Grid::convertPositionToIndex(const Eigen::Vector3f &position)const
 {
     // グリッドの最小値をとる点を原点に持ってきたときの相対位置に変換する.

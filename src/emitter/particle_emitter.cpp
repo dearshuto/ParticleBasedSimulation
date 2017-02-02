@@ -10,6 +10,7 @@
 #include <functional>
 #include <numeric>
 #include <tuple>
+#include <Eigen/Core>
 #include <Eigen/Geometry>
 #include "particle_based_simulation/simulation/collision_object/mesh/mesh.hpp"
 #include "particle_based_simulation/simulation/grid/sparse_grid.hpp"
@@ -17,8 +18,8 @@
 
 fj::SparseGrid<bool> fj::ParticleEmitter::execute(const std::vector<std::array<Eigen::Vector3f, 3>> &triangleMeshVertices, const float gridSize)
 {
-    // TODO: 正しくminmaxが探索できているかテストする
     auto grid = generateGrid(triangleMeshVertices, gridSize);
+    
     for (auto& vertices: triangleMeshVertices)
     {
         
@@ -51,8 +52,8 @@ std::pair<Eigen::Vector3f, Eigen::Vector3f> fj::ParticleEmitter::searchMinMax(co
     std::pair<Eigen::Vector3f, Eigen::Vector3f> result{{-kInfinity, -kInfinity, -kInfinity}, {kInfinity, kInfinity, kInfinity}};
     
     // Compare順になってなかったら値を更新する.
-    const auto Update = [](const float value, float* result, const std::function<bool(const float, const float)> compare){
-        if (!compare(value, *result)) (*result) = value;
+    const auto UpdateIf = [](const float value, float* result, const std::function<bool(const float, const float)> compare){
+        if (compare(value, *result)) (*result) = value;
     };
 
     for (const auto& triangle : triangleMeshVertices)
@@ -61,8 +62,11 @@ std::pair<Eigen::Vector3f, Eigen::Vector3f> fj::ParticleEmitter::searchMinMax(co
         {
             for (int i = 0; i < 3; i++)
             {
-                Update(vertex[i], &result.first[i], std::greater<float>());
-                Update(vertex[i], &result.second[i], std::less<float>());
+                // (左辺 > 右辺) が成り立っているときに値を更新する.
+                UpdateIf(vertex[i], &result.first[i], std::greater<float>());
+                
+                // (左辺 < 右辺) が成り立っているときに値を更新する.
+                UpdateIf(vertex[i], &result.second[i], std::less<float>());
             }
         }
     }

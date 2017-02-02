@@ -22,13 +22,16 @@ namespace Eigen {
 class fj::Grid
 {
 protected:
+    /// 最大値と最小値のペアを明示して使用するための構造体.
     struct Range
     {
         float Max;
         float Min;
     };
 
-    /// すべてのRangeはsizeよりも大きな値をであること
+    /**
+     * @param size 格子1つの大きさ
+     * @note すべてのRangeはsizeよりも大きな範囲ををであること. */
     Grid(const Range& rangeX, const Range& rangeY, const Range& rangeZ, const float size = 1.0)
     : m_rangeX(rangeX)
     , m_rangeY(rangeY)
@@ -42,10 +45,17 @@ public:
     Grid() = delete;
     virtual~Grid() = default;
     
+    /** 指定した位置にグリッドが用意されているか判断する.
+     * @param アクセスしたい位置.
+     * @return falseのとき, position の位置にある格子にアクセスしようとするとぬるぽで落ちる. */
     bool isValid(const Eigen::Vector3f& position)const;
-protected:
-        
+    
+    /** グリッドの内部は1次元の配列として扱われているので, インデックスで指定された格子の3次元空間を取得する. */
+    Eigen::Vector3f convertIndexToPosition(const Eigen::Index index)const;
+    
     unsigned int convertPositionToIndex(const Eigen::Vector3f& position)const;
+    
+protected:
     
     /// グリッドの講師の数を計算する
     unsigned int computeAllDataSize()const;

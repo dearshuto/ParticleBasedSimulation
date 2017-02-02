@@ -18,6 +18,7 @@ namespace fj {
     template<class T>class SparseGrid;
 }
 
+/// Eigenをラップした疎行列
 template <class T>
 class fj::SparseGrid : public fj::Grid
 {
@@ -45,7 +46,16 @@ public:
     {
         return m_data.coeffRef(convertPositionToIndex(position));
     }
-
+    const T& at(const Eigen::Index& index)const
+    {
+        return m_data.coeffRef(index);
+    }
+    T& at(const Eigen::Index& index)
+    {
+        return m_data.coeffRef(index);
+    }
+    
+    
 private:
     Eigen::SparseVector<T> m_data;
 public:

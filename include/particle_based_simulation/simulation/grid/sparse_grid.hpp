@@ -18,6 +18,7 @@ namespace fj {
     template<class T>class SparseGrid;
 }
 
+/// Eigenをラップした疎行列
 template <class T>
 class fj::SparseGrid : public fj::Grid
 {

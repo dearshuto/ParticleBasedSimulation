@@ -44,6 +44,10 @@ protected:
     
     /** @return firstが最大値, secondが最小値となるstd::pair*/
     std::pair<Eigen::Vector3f, Eigen::Vector3f> searchMinMax(const std::vector<std::array<Eigen::Vector3f, 3>>& triangleMeshVertices)const;
+    
+    /** 三角メッシュを内包するバウンディングボックスを生成する
+     * @return first 最大値の頂点, second 最小値の頂点*/
+    std::pair<Eigen::Vector3f, Eigen::Vector3f> makeBoundingBox(const std::array<Eigen::Vector3f, 3>& triangleMesh)const;
 };
 
 #endif /* particle_emitter_hpp */

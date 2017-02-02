@@ -22,8 +22,20 @@ fj::SparseGrid<bool> fj::ParticleEmitter::execute(const std::vector<std::array<E
     
     for (auto& vertices: triangleMeshVertices)
     {
+        const auto kBoundingBox = makeBoundingBox(vertices);
+        const auto& kMax = kBoundingBox.first;
+        const auto& kMin = kBoundingBox.second;
         
+        for (float z = kMin.z(); z < kMax.z(); z += grid.getGridSize()){
+            for (float y = kMin.y(); y < kMax.y(); y += grid.getGridSize()){
+                for (float x = kMin.x(); x < kMax.x(); x += grid.getGridSize())
+                {
+                    grid.at({x, y, z}) = true;
+                }
+            }
+        }
     }
+    
     return grid;
 }
 
@@ -58,16 +70,43 @@ std::pair<Eigen::Vector3f, Eigen::Vector3f> fj::ParticleEmitter::searchMinMax(co
 
     for (const auto& triangle : triangleMeshVertices)
     {
-        for (const auto& vertex : triangle)
+        const auto kPair = makeBoundingBox(triangle);
+        
+        for (int i = 0; i < 3; i++)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                // (左辺 > 右辺) が成り立っているときに値を更新する.
-                UpdateIf(vertex[i], &result.first[i], std::greater<float>());
-                
-                // (左辺 < 右辺) が成り立っているときに値を更新する.
-                UpdateIf(vertex[i], &result.second[i], std::less<float>());
-            }
+            // (左辺 > 右辺) が成り立っているときに値を更新する.
+            UpdateIf(kPair.first[i], &result.first[i], std::greater<float>());
+            
+            // (左辺 < 右辺) が成り立っているときに値を更新する.
+            UpdateIf(kPair.second[i], &result.second[i], std::less<float>());
+        }
+    }
+    
+    return result;
+}
+
+std::pair<Eigen::Vector3f, Eigen::Vector3f> fj::ParticleEmitter::makeBoundingBox(const std::array<Eigen::Vector3f, 3> &triangleMesh)const
+{
+    //まず, 三角メッシュの中の最小値と最大値を見つけてくる
+    const float kInfinity = std::numeric_limits<float>::infinity();
+    
+    // 最大値を格納する方はすべてを負の無限大で, 最小値を格納する方は生の無限大で初期化.
+    std::pair<Eigen::Vector3f, Eigen::Vector3f> result{{-kInfinity, -kInfinity, -kInfinity}, {kInfinity, kInfinity, kInfinity}};
+    
+    // Compare順になってなかったら値を更新する.
+    const auto UpdateIf = [](const float value, float* result, const std::function<bool(const float, const float)> compare){
+        if (compare(value, *result)) (*result) = value;
+    };
+    
+    for (const auto& vertex : triangleMesh)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            // (左辺 > 右辺) が成り立っているときに値を更新する.
+            UpdateIf(vertex[i], &result.first[i], std::greater<float>());
+            
+            // (左辺 < 右辺) が成り立っているときに値を更新する.
+            UpdateIf(vertex[i], &result.second[i], std::less<float>());
         }
     }
     

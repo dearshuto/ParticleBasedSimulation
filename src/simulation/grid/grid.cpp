@@ -36,8 +36,9 @@ Eigen::Vector3f fj::Grid::convertIndexToPosition(const Eigen::Index index)const
     const auto GridNumY = computeGridNum(getRangeY());
     
     int z = index / (GridNumX * GridNumY);
-    int y = 0;
-    int x = 0;
+    int temp = (index - z*GridNumX*GridNumY);
+    int y = temp / GridNumX;
+    int x = temp - y*GridNumX;
     
     return getGridSize() * Eigen::Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)};
 }

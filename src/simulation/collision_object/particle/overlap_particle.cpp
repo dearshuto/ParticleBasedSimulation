@@ -9,7 +9,7 @@
 #include "particle_based_simulation/simulation/collision_object/particle/overlap_particle.hpp"
 
 fj::OverlapParticle::OverlapParticle(const btScalar overlap, const btScalar mass)
-: Super(mass, std::unique_ptr<fj::OverlapParticleShape>{new fj::OverlapParticleShape{overlap}})
+: Super(mass, std::unique_ptr<fj::OverlapParticleShape>{fj::OverlapParticleShape::GetParticleShape(overlap)})
 {
 
 }

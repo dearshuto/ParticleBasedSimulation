@@ -33,6 +33,9 @@ public:
     virtual~OverlapParticle() = default;
     
     btScalar getOverlapRange()const;
+    
+    /// 使い回す用の粒子形状
+    static fj::OverlapParticleShape ParticleShape;
 };
 
 #endif /* overlap_particle_hpp */

@@ -45,9 +45,9 @@ int main(int argc, char** argv)
     
     // 粒子生成
 	auto initializeStart = std::chrono::system_clock::now();
-    for (int i = 0; i < 5; i++){
-        for (int j = 0; j < 5; j++){
-            for (int k = 0; k < 5; k++)
+    for (int i = 0; i < 7; i++){
+        for (int j = 0; j < 7; j++){
+            for (int k = 0; k < 7; k++)
             {
                 btVector3 position = btVector3(i, j, k);
                 btMatrix3x3 matrix;

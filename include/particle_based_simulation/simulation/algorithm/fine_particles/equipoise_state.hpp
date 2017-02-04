@@ -22,7 +22,7 @@ public:
     EquipoiseState() = default;
     virtual~EquipoiseState() = default;
     
-    void update(fj::Particle<fj::RheorogyParameter>* particle)override;
+    void update(fj::YieldParticle* yieldParticle)override;
 };
 
 #endif /* equipoise_state_hpp */

@@ -22,7 +22,7 @@ public:
     CollapseState() = default;
     virtual~CollapseState() = default;
     
-    void update(fj::Particle<fj::RheorogyParameter>* particle)override;
+    void update(fj::YieldParticle* yieldParticle)override;
 };
 
 #endif /* collapse_state_hpp */

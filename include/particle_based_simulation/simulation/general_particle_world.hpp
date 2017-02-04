@@ -117,7 +117,7 @@ private:
                 if (particle1 && particle2)
                 {
                     // ここで, 実際の型に変換する.
-                    m_contactInfo = new ParticlesContactInfo{static_cast<Particle*const>(particle1), static_cast<Particle*const>(particle2)};
+                    m_contactInfo.reset(new ParticlesContactInfo{static_cast<Particle*const>(particle1), static_cast<Particle*const>(particle2)});
                     if ( m_contactInfo->kOverlap > 0 )
                     {
                         return true;
@@ -147,7 +147,7 @@ private:
     private:
         /// 操作中のインデックス
         unsigned int m_index;
-        ParticlesContactInfo* m_contactInfo;
+        std::shared_ptr<ParticlesContactInfo> m_contactInfo;
         btBroadphasePairArray* m_pairArray;
     };
 

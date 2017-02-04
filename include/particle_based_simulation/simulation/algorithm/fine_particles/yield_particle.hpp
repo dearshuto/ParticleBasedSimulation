@@ -55,7 +55,7 @@ public:
     
     void addForce(const btVector3& force);
     
-    void clearForce();
+    void clearDiscretizedForce();
     
     bool hasContactForce()const;
     

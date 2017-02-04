@@ -12,6 +12,10 @@
 
 void fj::YieldParticle::addForce(const btVector3 &force)
 {
+    // 力の総和
+    getRigidBodyPtr()->applyCentralForce(force);
+    
+    // 離散化した面ごとの力
     const auto& normalContainer = m_normalForceContainer->getNormalContainerSharedPtr();
 
     for (size_t i = 0; i < normalContainer->size(); ++i)
@@ -22,7 +26,7 @@ void fj::YieldParticle::addForce(const btVector3 &force)
     }
 }
 
-void fj::YieldParticle::clearForce()
+void fj::YieldParticle::clearDiscretizedForce()
 {
     m_normalForceContainer->clearStress();
 }
@@ -30,4 +34,9 @@ void fj::YieldParticle::clearForce()
 bool fj::YieldParticle::hasContactForce()const
 {
     return true;
+}
+
+std::pair<btScalar, btScalar> fj::YieldParticle::getMinMax()const
+{
+    return m_normalForceContainer->getMinMax();
 }

@@ -11,5 +11,5 @@
 
 void fj::CollapseState::update(fj::YieldParticle* yieldParticle)
 {
-    // 崩壊状態では普通に接触力を適用させる.
+    yieldParticle->clearDiscretizedForce();
 }

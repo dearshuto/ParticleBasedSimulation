@@ -13,7 +13,7 @@
 
 void fj::MohrStressCircle::addContactForce(const btVector3& normalStress)
 {
-    m_contactForce.push_back(normalStress);
+    getDiscretizedParticlePtr()->addForce(normalStress);
 }
 
 void fj::MohrStressCircle::rebuildMohrCircle(const btQuaternion& rotateMatrix)
@@ -46,31 +46,28 @@ void fj::MohrStressCircle::rebuildCircleCenterAndRadius(const btQuaternion& rota
 {
     // 各面にかかっている垂直応力の中の最大値と最小値を見つける.
     
-    NormalStressContainer stressContainer = computeNormalStress(rotateMatrix);
-    const auto& kMinMax = std::minmax_element(std::begin(stressContainer), std::end(stressContainer));
-    const auto kMin = *std::get<0>(kMinMax);
-    const auto kMax = *std::get<1>(kMinMax);
+    const auto& kMinMax = getDiscretizedParticlePtr()->getMinMax();
+    const auto kMin = std::get<0>(kMinMax);
+    const auto kMax = std::get<1>(kMinMax);
 
     Center = {static_cast<btScalar>(( kMin + kMax) / 2.0), 0};
     Radius = (kMax - kMin) / btScalar(2.);
 }
 
-fj::MohrStressCircle::NormalStressContainer fj::MohrStressCircle::computeNormalStress(const btQuaternion &rotateMatrix)const
+fj::MohrStressCircle::NormalStressContainer fj::MohrStressCircle::computeNormalStress(const btQuaternion &rotateMatrix)
 {
     // 各面に対してかかっている垂直応力を算出する
     
     // 離散化形状
-    auto discretizedShape = fj::DiscritizedParticleShape::GetDiscretizedParticleShapeNormal(getDiscretizedShapeType());
     
     // 離散化形状の麺の数だけコンテナを用意して, 0で初期化しておく
-    NormalStressContainer stressContainer;
-    stressContainer.resize(discretizedShape->size());
-    std::fill(stressContainer.begin(), stressContainer.end(), 0);
+//    getDiscretizedParticlePtr()->clear();
     
     // 離散化形状の各面の法線に回転成分を適用する. そのあとすべての接触力を評価する
-    for (int i = 0; i < discretizedShape->size(); i++)
+    // 今のところ回転は考慮してない
+    for (int i = 0; i < getDiscretizedParticlePtr()->size(); i++)
     {
-        auto kNormal = discretizedShape->get(i);//rotateMatrix * discretizedShape->get(i);
+        auto kNormal = getDiscretizedParticlePtr()->get(i);//rotateMatrix * discretizedShape->get(i);
 //        kNormal *= rotateMatrix.inverse();
         
         for (const auto& stress: m_contactForce)

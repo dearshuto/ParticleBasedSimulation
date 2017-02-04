@@ -35,7 +35,7 @@ public:
     ~MohrStressCircle() = default;
     
     explicit MohrStressCircle(const fj::DiscritizedParticleShape::ShapeType shapeType = fj::DiscritizedParticleShape::ShapeType::kCube)
-    : m_discretizedShapeType(shapeType)
+    : m_discretizedParticle(fj::DiscritizedParticleShape::GetDiscretizedParticleShapeNormal(shapeType))
     {
 
     }
@@ -65,9 +65,9 @@ public:
         return m_contactForce;
     }
     
-    const fj::DiscritizedParticleShape::ShapeType getDiscretizedShapeType()const
+    std::unique_ptr<fj::DiscritizedParticleShape::NormalContainer>& getDiscretizedParticlePtr()
     {
-        return m_discretizedShapeType;
+        return m_discretizedParticle;
     }
     
     const btScalar getRadius()const
@@ -78,13 +78,13 @@ public:
 private:
     void rebuildCircleCenterAndRadius(const btQuaternion& rotateMatrix);
     
-    NormalStressContainer computeNormalStress(const btQuaternion& rotateMatrix)const;
+    NormalStressContainer computeNormalStress(const btQuaternion& rotateMatrix);
     
 private:
     /// 接触している粒子から受けてる力. 1つの接触につき1つの力が保持される. */
     ContactForceContainer m_contactForce;
     
-    fj::DiscritizedParticleShape::ShapeType m_discretizedShapeType;
+    std::unique_ptr<fj::DiscritizedParticleShape::NormalContainer> m_discretizedParticle;
 };
 
 #endif /* mohr_stress_circle_hpp */

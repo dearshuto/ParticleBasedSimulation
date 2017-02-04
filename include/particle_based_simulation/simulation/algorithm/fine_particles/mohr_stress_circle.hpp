@@ -35,10 +35,7 @@ public:
     MohrStressCircle() = default;
     ~MohrStressCircle() = default;
     
-    
-    /// @param normalStress 有限な値である力*/
-    void addContactForce(const btVector3& normalStress);
-    
+        
     /// モール応力円の中心と半径を再計算する.*/
     void rebuildMohrCircle(const fj::YieldParticle& yieldParticle, const btQuaternion& rotateMatrix);
     

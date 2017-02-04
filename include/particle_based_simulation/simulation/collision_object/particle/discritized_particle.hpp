@@ -18,11 +18,12 @@ class btVector3;
 class btMatrix3x3;
 
 namespace fj {
+    class NormalContainer;
     template<class Parameter> class Particle;
     template<class Parameter> class DiscritizedParticle;
 }
 
-class NormalContainer
+class fj::NormalContainer
 {
 protected:
     NormalContainer() = default;

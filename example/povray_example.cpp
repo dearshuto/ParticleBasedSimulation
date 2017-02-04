@@ -14,6 +14,8 @@
 
 #include "particle_based_simulation/simulation/general_particle_world.hpp"
 #include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/yield_particle.hpp"
+#include "particle_based_simulation/simulation/algorithm/fine_particles/cubic_normal_force_container.hpp"
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
 #include "particle_based_simulation/simulation/collision_object/primitive/box.hpp"
 #include "particle_based_simulation/additional/povray/povray_output.hpp"
@@ -26,7 +28,7 @@ int main(int argc, char** argv)
     world->setGravity( btVector3(0, -9.8, 0) );
     
         // レンダリング
-    auto povray = rheorogyAlgorithm->generateProfileSystem(fj::ParticleAlgorithm<fj::RheorogyParameter>::Profile::kPOVRayOutput);
+    auto povray = rheorogyAlgorithm->generateProfileSystem(fj::ParticleAlgorithm<fj::YieldParticle>::Profile::kPOVRayOutput);
     auto output = static_cast<fj::POVRayOutput*>(povray.get());
     auto& location =  output->getCameraInformationPtr()->Location;
     location.X = -15;
@@ -53,8 +55,9 @@ int main(int argc, char** argv)
 //                matrix.setEulerZYX(45, 45, 45);
 //                position = matrix * position;
                 position += btVector3(0, 0.6, 0);
-                
-                auto particle = rheorogyAlgorithm->GenerateParticle(position);
+                std::unique_ptr<fj::CubeNormalForceContainer> cubicNormalForceContainer{new fj::CubeNormalForceContainer};
+                std::unique_ptr<fj::YieldParticle> particle{new fj::YieldParticle(0.5, 0.1, std::move(cubicNormalForceContainer), 0.25/*rigidRadius*/)};
+
                 particle->getParameterPtr()->SpringParameter = 100.0;
                 particle->getParameterPtr()->DashpodEnvelope = 10.0;
 //                particle->getWarrenSpringCurvePtr()->getParameterPtr()->Adhesion = 5.0;

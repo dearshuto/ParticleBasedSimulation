@@ -13,11 +13,12 @@
 #include <tuple>
 #include <vector>
 #include <btBulletDynamicsCommon.h>
-#include "particle_based_simulation/simulation/collision_object/particle/discritized_particle_shape.hpp"
+#include "particle_based_simulation/simulation/collision_object/particle/discritized_particle.hpp"
 #include "particle_based_simulation/shape_2d/circle.hpp"
 #include "particle_based_simulation/simulation/algorithm/fine_particles/warren_spring_curve.hpp"
 
 namespace fj {
+    class YieldParticle;
     class CollapseCurve;
     class MohrStressCircle;
 }
@@ -31,43 +32,19 @@ class fj::MohrStressCircle : public fj::Circle
 public:
     // ShapeTypeを指定させたいので, デフォルトコンストラクタは抹消する.
     // delete修飾子だと宣言は残ってしまうらしく, コンパイルエラーが起きるのでコメントアウトで対応してます.
-    //    explicit MohrStressCircle() = delete;
+    MohrStressCircle() = default;
     ~MohrStressCircle() = default;
     
-    explicit MohrStressCircle(const fj::DiscritizedParticleShape::ShapeType shapeType = fj::DiscritizedParticleShape::ShapeType::kCube)
-    : m_discretizedShapeType(shapeType)
-    {
-
-    }
-    
-    /// @param normalStress 有限な値である力*/
-    void addContactForce(const btVector3& normalStress);
-    
+        
     /// モール応力円の中心と半径を再計算する.*/
-    void rebuildMohrCircle(const btQuaternion& rotateMatrix);
+    void rebuildMohrCircle(const fj::YieldParticle& yieldParticle, const btQuaternion& rotateMatrix);
     
     /// 崩壊曲線と交点をもつかを判定する
     bool hasContactPoint(const fj::CollapseCurve& collapseCurve)const;
     
-    /** この関数を呼んだ時点で, このモールの応力円をもつ粒子が他の粒子と接触していたかを判定する
-     * @attention 前に clearContactForce() を呼んだときからの接触を判定します. */
-    bool hasContact()const;
-    
-    void clearContactForce();
-    
     const Position2D& getCenter()const
     {
         return Super::Center;
-    }
-
-    const ContactForceContainer& getContactForceContainer()const
-    {
-        return m_contactForce;
-    }
-    
-    const fj::DiscritizedParticleShape::ShapeType getDiscretizedShapeType()const
-    {
-        return m_discretizedShapeType;
     }
     
     const btScalar getRadius()const
@@ -76,15 +53,7 @@ public:
     }
     
 private:
-    void rebuildCircleCenterAndRadius(const btQuaternion& rotateMatrix);
-    
-    NormalStressContainer computeNormalStress(const btQuaternion& rotateMatrix)const;
-    
-private:
-    /// 接触している粒子から受けてる力. 1つの接触につき1つの力が保持される. */
-    ContactForceContainer m_contactForce;
-    
-    fj::DiscritizedParticleShape::ShapeType m_discretizedShapeType;
+    void rebuildCircleCenterAndRadius(const fj::YieldParticle& yieldParticle, const btQuaternion& rotateMatrix);
 };
 
 #endif /* mohr_stress_circle_hpp */

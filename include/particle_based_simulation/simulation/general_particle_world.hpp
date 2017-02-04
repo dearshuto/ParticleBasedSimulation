@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 #include "overlap_particle_world.hpp"
+#include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
+
 
 namespace fj {
     template<class Particle>class GeneralParticleWorld;
@@ -99,6 +101,7 @@ private:
         
         bool hasNext()
         {
+            using ParticleBase = fj::Particle<typename Particle::ParameterType>;
             while(m_index < m_pairArray->size())
             {
                 // Bullet Physics のフレームワークから, 衝突が起きそうなペアを抽出する.
@@ -106,13 +109,15 @@ private:
                 btCollisionObject* body0 = static_cast<btCollisionObject*>(pair.m_pProxy0->m_clientObject);
                 btCollisionObject* body1 = static_cast<btCollisionObject*>(pair.m_pProxy1->m_clientObject);
                 
-                Particle*const particle1 = Particle::Upcast(body0);
-                Particle*const particle2 = Particle::Upcast(body1);
+                // 粒子か判定するために, まずは fj::Particle かどうかを判定する
+                ParticleBase*const particle1 = ParticleBase::Upcast(body0);
+                ParticleBase*const particle2 = ParticleBase::Upcast(body1);
                 
                 // 粒子同士の衝突だったら, オーバーラップが発生しているか判定する
                 if (particle1 && particle2)
                 {
-                    m_contactInfo = new ParticlesContactInfo{particle1, particle2};
+                    // ここで, 実際の型に変換する.
+                    m_contactInfo = new ParticlesContactInfo{static_cast<Particle*const>(particle1), static_cast<Particle*const>(particle2)};
                     if ( m_contactInfo->kOverlap > 0 )
                     {
                         return true;

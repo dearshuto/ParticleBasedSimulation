@@ -34,6 +34,7 @@ public:
 
     void clearStress() override;
     
+    std::pair<btScalar, btScalar> getMinMax()const override;
 private:
     std::array<btScalar, 6> m_pressure;
 };

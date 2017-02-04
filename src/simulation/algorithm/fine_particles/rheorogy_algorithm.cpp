@@ -43,7 +43,7 @@ void fj::RheorogyAlgorithm::updateParticleState()
         const auto& kMohrStressCircle = particle->getParameter().MohrStressCircle;
         const WarrenSpringCurve& kWarrenSpringCurve = particle->getParameter().WarrenSpringCurve;
         
-		if (true)//kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
+		if (kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
         {
             particle->getParameterPtr()->State.reset(new fj::CollapseState);
         }

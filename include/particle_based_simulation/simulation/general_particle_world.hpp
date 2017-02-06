@@ -17,7 +17,7 @@ namespace fj {
     template<class Particle>class GeneralParticleWorld;
 }
 
-/// シミュレーション対象の粒子を一般化したワールド.
+/// 一般的な粒子を管理するワールド.
 /** 理論上, どんな粒子のシミュレーションもこのクラスで管理できる（はず）.
  * fj::ParticleAlgorithm のメンバ変数として提供されています. 
  * このクラスをプログラマがインスタンス化して使うことは想定していません. インスタンス化して嬉しい局面は思いつきませんね.
@@ -39,6 +39,7 @@ public:
         , kDirection12(particle2->getPosition() - particle1->getPosition())
         , kDistance(kDirection12.norm())
         , kNormalizedDirection12(kDirection12 / kDistance)
+        , kOverlap((particle1->getOverlapRange() + particle2->getOverlapRange()) - kDistance)
         {
             
         }
@@ -48,6 +49,7 @@ public:
         const btVector3 kDirection12;
         const btScalar kDistance;
         const btVector3 kNormalizedDirection12;
+        const float kOverlap;
     };
 private:
     
@@ -99,6 +101,7 @@ private:
         {
             while(m_index < m_pairArray->size())
             {
+                // Bullet Physics のフレームワークから, 衝突が起きそうなペアを抽出する.
                 const auto pair = m_pairArray->at(m_index);
                 btCollisionObject* body0 = static_cast<btCollisionObject*>(pair.m_pProxy0->m_clientObject);
                 btCollisionObject* body1 = static_cast<btCollisionObject*>(pair.m_pProxy1->m_clientObject);
@@ -106,14 +109,23 @@ private:
                 Particle*const particle1 = Particle::Upcast(body0);
                 Particle*const particle2 = Particle::Upcast(body1);
                 
+                // 粒子同士の衝突だったら, オーバーラップが発生しているか判定する
                 if (particle1 && particle2)
-                {// 粒子同士のペアだったら情報を内部に保持してtrueを返す.
-                    m_particle1 = particle1;
-                    m_particle2 = particle2;
-                    return true;
+                {
+                    // ここで, 実際の型に変換する.
+                    m_contactInfo.reset(new ParticlesContactInfo{static_cast<Particle*const>(particle1), static_cast<Particle*const>(particle2)});
+                    if ( m_contactInfo->kOverlap > 0 )
+                    {
+                        return true;
+                    }
+                    else
+                    {// オーバラップしてなかったらインデクスを増やしてもう一周.
+                        m_index++;
+                        continue;
+                    }
                 }
                 else
-                {// 違ったらインデックスを増やしてもう一週.
+                {// 違ったらインデックスを増やしてもう一周.
                     m_index++;
                     continue;
                 }
@@ -126,12 +138,12 @@ private:
         ParticlesContactInfo next()
         {
             m_index++; //次を指すようにしておかないと無限ループに陥る
-            return ParticlesContactInfo{m_particle1, m_particle2};
+            return *m_contactInfo;
         }
     private:
+        /// 操作中のインデックス
         unsigned int m_index;
-        Particle* m_particle1;
-        Particle* m_particle2;
+        std::shared_ptr<ParticlesContactInfo> m_contactInfo;
         btBroadphasePairArray* m_pairArray;
     };
 
@@ -156,7 +168,7 @@ public:
     /** パーティクルを追加する.  */
     void addParticle(std::unique_ptr<Particle> particle)
     {
-        getWorldPtr()->addRigidBody(particle.get());
+        getWorldPtr()->addRigidBody(particle->getRigidBodyPtr().get());
         m_particles.push_back(std::move(particle));
     }
     

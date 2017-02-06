@@ -10,6 +10,17 @@
 #include <ConvexDecomposition/cd_wavefront.h>
 #include "particle_based_simulation/simulation/collision_object/mesh/mesh.hpp"
 
+bool fj::Mesh::Iterator::hasNext()const
+{
+    return false;
+}
+
+std::array<btVector3, 3> fj::Mesh::Iterator::next()
+{
+    std::array<btVector3, 3> mesh;
+    return mesh;
+}
+
 bool fj::Mesh::loadFromFile(const std::string &filename)
 {
     // 読み込んだメッシュの数が返ってくる. 何も読み込めなかったらエラー
@@ -55,7 +66,7 @@ void fj::Mesh::updateMeshShape(std::unique_ptr<btTriangleIndexVertexArray> meshD
     btGImpactMeshShape* meshShape = new btGImpactMeshShape(meshData.get());
     meshShape->updateBound();
     std::unique_ptr<btCollisionShape> collisionShape(meshShape);
-    setCollisionShapeWithMemoryManagement(std::move(collisionShape));
+    setCollisionShape(std::move(collisionShape));
     
     // 頂点情報も取っておく
     m_vertexArray = std::move(meshData);

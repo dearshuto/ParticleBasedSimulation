@@ -15,19 +15,30 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "particle_based_simulation/simulation/bullet_algorithm/fine_particle_simulation_collision_configuration.hpp"
+#include "particle_based_simulation/simulation/collision_object/collision_object.hpp"
 
 namespace fj {
     class OverlapParticle;
     class OverlapParticleWorld;
 }
 
-/// Bullet Physics のフレームワークをラップしたクラス.
+/// Bullet Physics のフレームワークをラップした抽象クラス.
 /** 登録した剛体に対して, 「衝突判定および検出」, 「アクセスするインタフェースの提供」, 「位置更新」の3つを担う.
  * 「粒子ー剛体」の衝突は, 粒子を剛体の球としてこのクラス内で力学計算をするが, 「粒子ー粒子」の衝突は検出はするが実際の力学計算は行わない.
  * 実際の粒子シミュレーションは fj::Algorithm を継承したクラスに任せてある.
  * 上記の内容を実現するにはアルゴリズムを分岐する必要があるが, これは fj::FineParticleSimulationCollisionConfiguration が担っている. */
 class fj::OverlapParticleWorld
 {
+public:
+    /// 位置更新が行われる空間
+    enum class Dimension : uint8_t
+    {
+        // 3D空間
+        ThreeD,
+        
+        /// X-Y平面
+        TwoD,
+    };
 public:
     /// ワールド内の粒子を走査するイテレータ
     class Iterator
@@ -52,8 +63,7 @@ public:
               )
     
     {
-        // btGhostObjectがオーバラップしたオブジェクトを検知できるようにコールバックを登録しておく
-        m_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+        
     }
     
     virtual~OverlapParticleWorld() = default;
@@ -68,7 +78,13 @@ public:
     /** シミュレーション対象を追加する.
      * この関数を使って登録した剛体は、プログラム側で解放されます
      * @param body Particle以外の剛体 */
-    void addRigidBody(std::unique_ptr<btRigidBody> body);
+    void addRigidBody(std::unique_ptr<fj::CollisionObject> body);
+    
+    /** Bullet Physics のインスタンスを直接登録する. */
+	void addRigidBody(std::unique_ptr<btRigidBody> btBody);
+
+    /** 位置更新する空間を設定する. */
+    void switchSimulatorDimension(const Dimension dimension);
     
     void setGravity(const btVector3& gravity)
     {
@@ -87,11 +103,16 @@ protected:
     }
     
 private:
+    Dimension m_dimension;
+    
     //---------------- Bullet Physicsのフレームワークを利用するためのインスタンス ----------------------//
     /** Bullet Physicsは生ポインタで全ての処理をするので, メモリの管理はユーザ側でしなくてはならない
      * Bullet Physicsの中でシミュレーション対象となる剛体のメモリ管理用のコンテナ */
-    std::vector<std::unique_ptr<btRigidBody>> m_rigidBody;
+    std::vector<std::unique_ptr<fj::CollisionObject>> m_rigidBody;
     
+	// btRigidBodyを生で保持する用
+	std::vector<std::unique_ptr<btRigidBody>> m_btRigidBody;
+
     // Bullet Physicsを利用するために最低限必要なインスタンス
     std::unique_ptr<btCollisionConfiguration> m_collisionConfiguration;
     std::unique_ptr<btDispatcher> m_dispatcher;

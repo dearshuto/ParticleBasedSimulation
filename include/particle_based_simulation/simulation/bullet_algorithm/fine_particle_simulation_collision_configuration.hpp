@@ -16,6 +16,7 @@ namespace fj {
     class FineParticleSimulationCollisionConfiguration;
 }
 
+/// 球体どうしの衝突を Bullet Physics のフレームワークから排除させるコンフィグ.
 class fj::FineParticleSimulationCollisionConfiguration : public btDefaultCollisionConfiguration
 {
     typedef btDefaultCollisionConfiguration Super;

@@ -24,27 +24,35 @@
 * 必要なツール
  * cmake 2.7以降
 
-cmakeの基本的な使い方を記述します。  
-cmakeを通した後は、プラットフォームごとのビルドツールを使用してください
 
-* Windows  
- WindowsではcmakeのGUIを利用してください
+* 依存ライブラリ
+ * Bullet Physics 2.85.1
+ * Eigen 3.3.2  
 
-* Mac
- > $ cd path/to/directory  
- > $ mkdir build  
- > $ cd build  
- > $ cmake .. -G Xcode  
 
-* Linux
+ 1. まずvendor フォルダの下に依存ライブラリを配置してください.  
+ "git clone"でこのリポジトリを取得した場合は, 以下のコマンドで依存ライブラリがダウンロードされます.  
+ > git submodule update --init
+
+ 2. cmakeの基本的な使い方を記述します。  
+  cmakeを通した後は、プラットフォームごとのビルドツールを使用してください
+  * Windows  
+  WindowsではcmakeのGUIを利用してください
+
+  * Mac
+  > $ cd path/to/directory  
+  > $ mkdir build  
+  > $ cd build  
+  > $ cmake .. -G Xcode  
+
+  * Linux
   > $ cd path/to/directory  
   > $ mkdir build  
   > $ cd build  
   > $ cmake ..
 
 
-## 依存ライブラリ
-* Bullet Physics (物理エンジン)
 
 ## ライセンス
+WTFPL  
 好きにしやがれ

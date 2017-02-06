@@ -17,8 +17,3 @@ void fj::CubeNormalForceContainer::clearStress()
 {
     std::fill(std::begin(m_pressure), std::end(m_pressure), static_cast<btScalar>(0));
 }
-
-std::pair<btScalar, btScalar> fj::CubeNormalForceContainer::getMinMax()const
-{
-    return std::minmax(*std::begin(m_pressure), *std::end(m_pressure));
-}

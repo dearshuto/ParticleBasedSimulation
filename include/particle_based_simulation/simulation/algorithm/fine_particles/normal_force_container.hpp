@@ -38,7 +38,6 @@ public:
         return m_normal;
     }
     
-    virtual std::pair<btScalar, btScalar> getMinMax()const = 0;
 private:
     std::shared_ptr<fj::NormalContainer> m_normal;
 };

@@ -28,9 +28,12 @@ class btVector3;
 /** シミュレーションに必要な任意のパラメータを指定してシミュレーションができる.
  * 一般化するためにテンプレートテクニックを使ったので, ヘッダしか存在しない.
  * @param Parameter このアルゴリズムを実行するのに必要で, fj::Particle にないパラメータ. */
-template<class Particle>
+template<class Parameter>
 class fj::ParticleAlgorithm : public fj::Algorithm
 {
+public:
+    /// シミュレーションに必要なパラメータを保持した粒子.
+    typedef fj::Particle<Parameter> Particle;
 protected:
     // このアルゴリズムに対応したワールド.
     typedef fj::GeneralParticleWorld<Particle> ParticleWorld;

@@ -10,7 +10,8 @@
 #define fine_particle_state_hpp
 
 namespace fj {
-    class YieldParticle;
+    struct RheorogyParameter;
+    template <class T> class Particle;
     class FineParticleState;
 }
 
@@ -24,7 +25,7 @@ public:
     
     /** 粉体粒子になにかしらの影響を与える
      * @pre 粉体粒子にかかる力が計算済み*/
-    virtual void update(fj::YieldParticle* yieldParticle) = 0;
+    virtual void update(fj::Particle<fj::RheorogyParameter>* particle) = 0;
 };
 
 #endif /* fine_particle_state_hpp */

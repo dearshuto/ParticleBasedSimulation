@@ -68,8 +68,8 @@ void fj::RheorogyAlgorithm::applyNormalComponentContactForce(const ParticlesCont
     const auto kDistance = contactInfo.kDistance;
     
     // ばね
-    particle1->addForce(kSpringK * kDistance * kDirection21);
-    particle2->addForce(kSpringK * kDistance * kDirection12);
+    particle1->getParameterPtr()->MohrStressCircle.addContactForce(kSpringK * kDistance * kDirection21);
+    particle2->getParameterPtr()->MohrStressCircle.addContactForce(kSpringK * kDistance * kDirection12);
     
     // ダッシュポッド
     const btVector3 kRelativeVelocity12 = particle2->getLinearVelocity() - particle1->getLinearVelocity();
@@ -82,11 +82,11 @@ void fj::RheorogyAlgorithm::applyNormalComponentContactForce(const ParticlesCont
                                                                         / (std::pow(kPI, 2.0) * std::pow(std::log(E), 2.0))
                                                                         );
     
-    particle1->addForce(kEta * kRelativeVelocity21);
-    particle2->addForce(kEta * kRelativeVelocity12);
+    particle1->getParameterPtr()->MohrStressCircle.addContactForce(kEta * kRelativeVelocity21);
+    particle2->getParameterPtr()->MohrStressCircle.addContactForce(kEta * kRelativeVelocity12);
 }
 
-btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const fj::YieldParticle &particle1, const fj::YieldParticle &particle2)const
+btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const Particle &particle1, const Particle &particle2)const
 {
     const auto& kRheorogyParameter1 = particle1.getParameter();
     const auto& kRheorogyParameter2 = particle2.getParameter();
@@ -94,7 +94,7 @@ btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const fj::YieldParticle &
     return (kRheorogyParameter1.DashpodEnvelope + kRheorogyParameter2.DashpodEnvelope) / 2.0;
 }
 
-btScalar fj::RheorogyAlgorithm::computeReducedMass(const fj::YieldParticle &particle1, const fj::YieldParticle &particle2)const
+btScalar fj::RheorogyAlgorithm::computeReducedMass(const Particle &particle1, const Particle &particle2)const
 {
     const auto kMass1 = particle1.getMass();
     const auto kMass2 = particle2.getMass();

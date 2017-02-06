@@ -13,7 +13,6 @@
 
 namespace fj {
     struct SPHParameter;
-    typedef fj::Particle<SPHParameter> SPHParticle;
     class SPH;
 }
 
@@ -26,7 +25,7 @@ struct fj::SPHParameter
     btVector3 Viscosity;
 };
 
-class fj::SPH : public fj::ParticleAlgorithm<fj::SPHParticle>
+class fj::SPH : public fj::ParticleAlgorithm<fj::SPHParameter>
 {
     typedef fj::ParticleAlgorithm<fj::SPHParameter> Super;
     typedef fj::Particle<fj::SPHParameter> SPHParticle;

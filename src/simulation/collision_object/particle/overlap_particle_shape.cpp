@@ -6,6 +6,7 @@
 //
 //
 
+#include <algorithm>
 #include "particle_based_simulation/simulation/collision_object/particle/overlap_particle_shape.hpp"
 
 std::vector<std::unique_ptr<fj::OverlapParticleShape>> fj::OverlapParticleShape::m_shapes;

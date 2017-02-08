@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     world->setGravity( btVector3(0, -9.8, 0) );
     
         // レンダリング
-    auto povray = rheorogyAlgorithm->generateProfileSystem(fj::ParticleAlgorithm<fj::RheorogyParameter>::Profile::kPOVRayOutput);
+    auto povray = rheorogyAlgorithm->generateProfileSystem(fj::ParticleAlgorithm::Profile::kPOVRayOutput);
     auto output = static_cast<fj::POVRayOutput*>(povray.get());
     auto& location =  output->getCameraInformationPtr()->Location;
     location.X = -15;

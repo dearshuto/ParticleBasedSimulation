@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 
+#include "particle_based_simulation/additional/profile/simulation_time_profile.hpp"
 #include "particle_based_simulation/simulation/general_particle_world.hpp"
 #include "particle_based_simulation/simulation/algorithm/fine_particles/rheorogy_algorithm.hpp"
 #include "particle_based_simulation/simulation/collision_object/particle/particle.hpp"
@@ -25,6 +26,7 @@ int main(int argc, char** argv)
     auto world = rheorogyAlgorithm->getWorldPtr();
     world->setGravity( btVector3(0, -9.8, 0) );
     
+    const auto simulationTimeProfiler = rheorogyAlgorithm->setupSimulationTimeProfileSystem();
     
     // レンダリング
     auto weakPtr = rheorogyAlgorithm->setupPOVRaySceneOutputSystem();
@@ -43,8 +45,8 @@ int main(int argc, char** argv)
     
     // 粒子生成
 	auto initializeStart = std::chrono::system_clock::now();
-    for (int i = 0; i < 7; i++){
-        for (int j = 0; j < 7; j++){
+    for (int i = 0; i < 17; i++){
+        for (int j = 0; j < 17; j++){
             for (int k = 0; k < 7; k++)
             {
                 btVector3 position = btVector3(i, j, k);
@@ -72,11 +74,6 @@ int main(int argc, char** argv)
 		<< "sec."
 		<< std::endl;
 
-
-    // 時間測定用の変数を定義
-	auto simulationStart = std::chrono::system_clock::now();
-    auto simulationEnd = std::chrono::system_clock::now();
-	auto simulationTime = simulationEnd - simulationStart;
 	
     // 引数でシミュレーションステップが指定されていなければ1000回だけシミュレーションを回す
     // 引数で渡された値が数字以外だったときの処理は未定義
@@ -100,17 +97,26 @@ int main(int argc, char** argv)
     // シミュレーションを進め, かかった時間を出力し, シミュレーション結果をpovray形式で吐き出す
     for (int i = 0; i < kStep; i++)
     {
-		simulationStart = std::chrono::system_clock::now();
         rheorogyAlgorithm->stepSimulation(1.0/60.0);
-		simulationEnd = std::chrono::system_clock::now();
-		simulationTime = simulationEnd - simulationStart;
-
-		std::cout << "Step " << i+1 << "/" << kStep << " = "
-			<< std::chrono::duration_cast<std::chrono::milliseconds>(simulationTime).count() / 1000.0
-			<< "sec."
-			<< std::endl;
+        if (auto pointer = simulationTimeProfiler.lock())
+        {
+            std::cout << "Step " << i+1 << "/" << kStep << " = "
+            << pointer->getCurrentTime() / 1000.0
+            << "sec."
+            << std::endl;
+        }
     }
 
+    if (auto pointer = simulationTimeProfiler.lock())
+    {
+        std::cout
+        << "Average: " << pointer->getCurrentAverage() / 1000.0 << " sec." << std::endl
+        << "Max    : " << pointer->getMax() / 1000.0 << " sec." << std::endl
+        << "Min    : " << pointer->getMin() / 1000.0 << " sec." << std::endl
+        << std::endl;
+    }
+    
+    
     // 粒子, ソルバの解放にかかる時間の測定
     auto destructStart = std::chrono::system_clock::now();
     rheorogyAlgorithm.release();
@@ -120,7 +126,7 @@ int main(int argc, char** argv)
     << std::chrono::duration_cast<std::chrono::milliseconds>(destructTime).count() / 1000.0
     << "sec."
     << std::endl;
-
+    
     
     return 0;
 }

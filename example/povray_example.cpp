@@ -25,7 +25,10 @@ int main(int argc, char** argv)
     auto world = rheorogyAlgorithm->getWorldPtr();
     world->setGravity( btVector3(0, -9.8, 0) );
     
-    auto output = rheorogyAlgorithm->setupPOVRaySceneOutputSystem();
+    
+    // レンダリング
+    auto weakPtr = rheorogyAlgorithm->setupPOVRaySceneOutputSystem();
+    auto output = weakPtr.lock();
     auto& location =  output->getCameraInformationPtr()->Location;
     location.X = -15;
     location.Y = 25;

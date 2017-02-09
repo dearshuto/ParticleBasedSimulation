@@ -9,6 +9,8 @@
 #ifndef particle_algorithm_hpp
 #define particle_algorithm_hpp
 
+#include "particle_based_simulation/additional/povray/povray_output.hpp"
+
 #include "algorithm.hpp"
 
 namespace fj {
@@ -33,12 +35,12 @@ public:
     /** POV-Ray形式でシーンを出力するシステムを作成する.
      * @return 作成したシステムへのポインタ
      * @todo 複数回呼び出すと, 同じ役割のインスタンスが作成されてしまう問題を解決する. */
-    fj::POVRayOutput*const setupPOVRaySceneOutputSystem()
+    std::weak_ptr<fj::POVRayOutput> setupPOVRaySceneOutputSystem()
     {
-        std::unique_ptr<fj::POVRayOutput> povray{new fj::POVRayOutput(getWorld())};
-        fj::POVRayOutput*const povrayPointer = povray.get();
-        addProfileSystem(std::move(povray));
-        return povrayPointer;
+        std::unique_ptr<fj::POVRayOutput> povray{new fj::POVRayOutput(getOverlapParticleWorld())};
+        std::weak_ptr<fj::AdditionalProcedure> result = addProfileSystem(std::move(povray));
+        auto returnPtr = std::static_pointer_cast<fj::POVRayOutput>(result.lock());
+        return std::weak_ptr<fj::POVRayOutput>{returnPtr};
     }
     
     

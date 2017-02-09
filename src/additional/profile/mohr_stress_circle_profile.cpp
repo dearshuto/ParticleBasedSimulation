@@ -71,7 +71,7 @@ void fj::MohrStressCircleProfile::endSimulationProfile(const fj::Algorithm& algo
         output << "set trange[-3:8]" << std::endl;
 
         // ワーレン・スプリング線を描画. 媒介変数を使用するときはまとめて書かないといけないらしい
-//        output << "plot cos(t)*" << kRadius <<  "+" << kCenter.X << "," << kRadius << "*sin(t), t, " << /*kWarrenSpringParameter.Adhesion*/0.5 << "*(" << "(t+" << kWarrenSpringParameter.Collapsibility << ")/" << kWarrenSpringParameter.Collapsibility << ")**(1.0/ " << kWarrenSpringParameter.SheerIndex << ")" << std::endl;
+        output << "plot cos(t)*" << kRadius <<  "+" << kCenter.X << "," << kRadius << "*sin(t), t, " << kWarrenSpringParameter.getParameter().Adhesion << "*(" << "(t+" << kWarrenSpringParameter.getParameter().Collapsibility << ")/" << kWarrenSpringParameter.getParameter().Collapsibility << ")**(1.0/ " << kWarrenSpringParameter.getParameter().SheerIndex << ")" << std::endl;
     }
     
 }

@@ -23,11 +23,7 @@ namespace fj {
 class fj::Algorithm
 {
 protected:
-    Algorithm()
-    : m_simulationStep(0)
-    {
-        
-    }
+    Algorithm() = default;
 public:
     virtual~Algorithm() = default;
     

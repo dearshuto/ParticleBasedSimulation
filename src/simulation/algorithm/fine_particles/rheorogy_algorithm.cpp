@@ -43,7 +43,7 @@ void fj::RheorogyAlgorithm::updateParticleState()
         const auto& kMohrStressCircle = particle->getParameter().MohrStressCircle;
         const WarrenSpringCurve& kWarrenSpringCurve = particle->getParameter().WarrenSpringCurve;
         
-		if (true)//kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
+		if (kMohrStressCircle.hasContactPoint(kWarrenSpringCurve))
         {
             particle->getParameterPtr()->State.reset(new fj::CollapseState);
         }
@@ -86,7 +86,7 @@ void fj::RheorogyAlgorithm::applyNormalComponentContactForce(const ParticlesCont
     particle2->getParameterPtr()->MohrStressCircle.addContactForce(kEta * kRelativeVelocity12);
 }
 
-btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const Particle &particle1, const Particle &particle2)const
+btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const fj::RheologyPatricle &particle1, const fj::RheologyPatricle &particle2)const
 {
     const auto& kRheorogyParameter1 = particle1.getParameter();
     const auto& kRheorogyParameter2 = particle2.getParameter();
@@ -94,7 +94,7 @@ btScalar fj::RheorogyAlgorithm::computeDashpodEnvelope(const Particle &particle1
     return (kRheorogyParameter1.DashpodEnvelope + kRheorogyParameter2.DashpodEnvelope) / 2.0;
 }
 
-btScalar fj::RheorogyAlgorithm::computeReducedMass(const Particle &particle1, const Particle &particle2)const
+btScalar fj::RheorogyAlgorithm::computeReducedMass(const fj::RheologyPatricle &particle1, const fj::RheologyPatricle &particle2)const
 {
     const auto kMass1 = particle1.getMass();
     const auto kMass2 = particle2.getMass();

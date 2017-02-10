@@ -14,6 +14,7 @@
 #include "particle_based_simulation/additional/additional_procedure.hpp"
 
 namespace fj {
+    class SimulationTimeProfile;
     class Algorithm;
 }
 
@@ -21,18 +22,8 @@ namespace fj {
 /** とりあえずシミュレーションの流れをテンプレート化してる.  */
 class fj::Algorithm
 {
-public:
-    /// fj::Algorithm の情報をプロファイルするシステム一覧
-    enum class Profile : uint8_t
-    {
-        kSimulationTimeProfile,
-    };
 protected:
-    Algorithm()
-    : m_simulationStep(0)
-    {
-        
-    }
+    Algorithm() = default;
 public:
     virtual~Algorithm() = default;
     
@@ -43,13 +34,16 @@ public:
     /** シミュレーションの終了処理. 呼ばなくてもメモリリークは起きない. */
     void terminate();
     
-    /** 追加処理を作成する. */
-    std::unique_ptr<fj::AdditionalProcedure> generateProfileSystem(const Profile profile);
+    /** シミュレーション時間のプロファイラを作成する.
+     * @return 追加したプロファイラへのポインタ. 
+     * @note std::shared_ptr を返すと循環参照になる可能性があるので std::weak_ptr にした. */
+    std::weak_ptr<fj::SimulationTimeProfile> setupSimulationTimeProfileSystem();
 
+protected:
     /** 追加処理を追加する.
      * @pre プロファイルが fj::SimulationProfile::Priority 順に並んでいる.
      * @post プロファイルが fj::SimulationProfile::Priority 順に並んでいる. */
-    void addProfileSystem(std::unique_ptr<fj::AdditionalProcedure> additionalProcedure);
+    std::weak_ptr<fj::AdditionalProcedure> addProfileSystem(std::unique_ptr<fj::AdditionalProcedure> additionalProcedure);
     
 private:
     void startProfiling();
@@ -64,7 +58,7 @@ public:
         return m_simulationStep;
     }
 protected:
-    std::vector<std::unique_ptr<fj::AdditionalProcedure>>* getAdditionalProceduresPtr()
+    std::vector<std::shared_ptr<fj::AdditionalProcedure>>* getAdditionalProceduresPtr()
     {
         return &m_additionalProcedures;
     }
@@ -72,7 +66,7 @@ private:
     /** fj::Algorithm::stepSimulation を呼んだ回数 */
     unsigned int m_simulationStep;
     
-    std::vector<std::unique_ptr<fj::AdditionalProcedure>> m_additionalProcedures;
+    std::vector<std::shared_ptr<fj::AdditionalProcedure>> m_additionalProcedures;
 };
 
 #endif /* algorithm_hpp */

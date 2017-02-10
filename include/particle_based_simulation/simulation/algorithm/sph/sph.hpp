@@ -9,10 +9,11 @@
 #ifndef sph_hpp
 #define sph_hpp
 
-#include "particle_based_simulation/simulation/algorithm/general/particle_algorithm.hpp"
+#include "particle_based_simulation/simulation/algorithm/general/general_particle_algorithm.hpp"
 
 namespace fj {
     struct SPHParameter;
+    typedef fj::Particle<SPHParameter> SPHParticle;
     class SPH;
 }
 
@@ -25,9 +26,9 @@ struct fj::SPHParameter
     btVector3 Viscosity;
 };
 
-class fj::SPH : public fj::ParticleAlgorithm<fj::SPHParameter>
+class fj::SPH : public fj::GeneralParticleAlgorithm<fj::SPHParticle>
 {
-    typedef fj::ParticleAlgorithm<fj::SPHParameter> Super;
+    typedef fj::GeneralParticleAlgorithm<fj::SPHParticle> Super;
     typedef fj::Particle<fj::SPHParameter> SPHParticle;
 public:
     SPH() = default;

@@ -43,28 +43,23 @@ void fj::Algorithm::terminate()
     }
 }
 
-std::unique_ptr<fj::AdditionalProcedure> fj::Algorithm::generateProfileSystem(const fj::Algorithm::Profile profile)
+std::weak_ptr<fj::SimulationTimeProfile> fj::Algorithm::setupSimulationTimeProfileSystem()
 {
-    std::unique_ptr<fj::AdditionalProcedure> procedure;
-    
-    switch (profile) {
-        case Profile::kSimulationTimeProfile:
-            procedure.reset(new fj::SimulationTimeProfile);
-            break;
-        default:
-            break;
-    }
-    
-    return procedure;
+    std::unique_ptr<fj::SimulationTimeProfile> profiler{new fj::SimulationTimeProfile};
+    std::weak_ptr<fj::AdditionalProcedure> result = addProfileSystem(std::move(profiler));
+    std::shared_ptr<fj::SimulationTimeProfile> casted = std::static_pointer_cast<fj::SimulationTimeProfile>(result.lock());
+    return std::weak_ptr<fj::SimulationTimeProfile>{casted};
 }
 
-void fj::Algorithm::addProfileSystem(std::unique_ptr<fj::AdditionalProcedure> additionalProcedure)
+std::weak_ptr<fj::AdditionalProcedure> fj::Algorithm::addProfileSystem(std::unique_ptr<fj::AdditionalProcedure> additionalProcedure)
 {
     // 新規追加された処理のプライオリティをもとに挿入箇所を探索
     const auto at = std::find_if(std::begin(m_additionalProcedures), std::end(m_additionalProcedures)
-                                 , [&](std::unique_ptr<fj::AdditionalProcedure>& containedProfile){
+                                 , [&](std::shared_ptr<fj::AdditionalProcedure>& containedProfile){
                                      return additionalProcedure->getPriorityAdUInt() <= containedProfile->getPriorityAdUInt();
                                  });
-    
-    m_additionalProcedures.insert(at, std::move(additionalProcedure));
+
+    std::shared_ptr<fj::AdditionalProcedure> instance{std::move(additionalProcedure)};
+    m_additionalProcedures.insert(at, instance);
+    return std::weak_ptr<fj::AdditionalProcedure>(instance);
 }

@@ -1,0 +1,17 @@
+[package]
+name = "sjps"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "sjps"
+path = "src/lib.rs"
+
+[dependencies]
+rapier3d = { version = "0.11.1", features = [ "simd-stable" ] }
+nalgebra = "0.30.1"
+
+[dev-dependencies]
+kiss3d = "0.32"
